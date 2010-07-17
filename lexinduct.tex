@@ -330,7 +330,7 @@ We have also collected stop words for Farsi, Bangla, Hindi, Polish, Spanish, Rus
 %-----------------------------------------------------
 \section{Experimental Evaluation}
 
-We evaluate performance of the lexicon induction framework on the monolingual resources we have collected and described in \secref{sect:resources}.  In the first set of experiments, we consider a high resource language pair to establish relative efficacy of the cues and to get a sense of an upper bound on the overall performance. We then induce translations between English and each of the low resource languages of interest.  Since many of the seed and test dictionaries are sparse and noisy, we investigate the feasibility of crowd-sourcing annotations and their use in an iterative induction procedure.  Finally, we investigate heuristics we discussed in \label{sect:morph} for handling morphology.\\
+We evaluate performance of the lexicon induction framework on the monolingual resources we have collected and described in \secref{sect:resources}.  In the first set of experiments, we consider a high resource language pair to establish relative efficacy of the cues and to get a sense of an upper bound on the overall performance. We then induce translations between English and each of the low resource languages of interest.  Since many of the seed and test dictionaries are sparse and noisy, we investigate the feasibility of crowd-sourcing annotations and their use in an iterative induction procedure.  Finally, we investigate heuristics we discussed in \secref{sect:morph} for handling morphology.\\
 
 In each experiment, we use $10\%$ of the dictionary to test the induced candidate lists for 1000 source words.  Unless mentioned otherwise, we use the simple equivalence class heuristic (i.e. each unique token is assigned its own equivalence class) when constructing both contextual vectors and candidates.  The performance is measured by top-$k$ accuracy, i.e. the proportion of source equivalence classes which have at least one test dictionary translation among top $k$ of its induced candidates.  Note that the reported performance is conservative since the test dictionaries are both noisy and sparse.\\
 
@@ -368,7 +368,7 @@ Word alignments can be induced directly from sentence aligned corpora.  In this 
 \centerline{\mbox{\includegraphics[width=2.4in]{figures/exp3/freq/freqtime} \includegraphics[width=2.4in]{figures/exp3/rand/randtime}}}
 \centerline{\mbox{\includegraphics[width=2.4in]{figures/exp3/freq/freqmrr} \includegraphics[width=2.4in]{figures/exp3/rand/randmrr}}}
 \caption{Accuracy of contextual (top) and temporal (middle) cues and the MRR heuristic (bottom) for most frequent (left) and random (right) 1000 source words for Welsh (cy), Farsi (fa), Indonesian (id), Latvian (lv), Russian (ru), Slovak (sk), Albanian (sq), Serbian (sr), Turkish (tr), and Uzbek (uz).}
-\label{fig:exp1}
+\label{fig:exp3}
 \end{figure}
 
 \subsection{Crowd-sourcing annotation}
