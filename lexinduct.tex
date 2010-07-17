@@ -72,7 +72,7 @@ keywords={corpora, resources, preprocessing, output, experiments}            % i
 
 \begin{abstract}
 
-Statistical machine translation relies on the availability of substantial amounts of human translated texts. Such bilingual resources are available for relatively few language pairs, which presents obstacles to applying current statistical translation models to low-resource languages. In this work, we induce bilingual dictionaries from more plentiful monolingual corpora using a diverse set of cues, including: cross-lingual vector space models, the frequencies of words over time, orthographic similarity, etc.  We report the efficacy of these monolingual cues and contrast their performance for a language pair where plentiful bilingual resources are available.  We further evaluate the accuracy of bilingual dictionaries induced between English and 12 \todo{Check number, list languages} low resource languages.  Since our principal objective is to induce lexicons with broad coverage, we contrast the performance of our framework on randomly selected source words with an optimistic results obtained on frequent words and typically reported in lexicon induction literature. 
+Statistical machine translation relies on the availability of substantial amounts of human translated texts. Such bilingual resources are available for relatively few language pairs, which presents obstacles to applying current statistical translation models to low-resource languages. In this work, we induce bilingual dictionaries from more plentiful monolingual corpora using a diverse set of cues, including: cross-lingual vector space models, the frequencies of words over time, orthographic similarity, etc.  We report the efficacy of these monolingual cues and contrast their performance for a language pair where plentiful bilingual resources are available.  We further evaluate the accuracy of bilingual dictionaries induced between English and 10 low resource languages.  Since our principal objective is to induce lexicons with broad coverage, we contrast the performance of our framework on randomly selected source words with an optimistic results obtained on frequent words and typically reported in lexicon induction literature. 
 
 \end{abstract}
 
@@ -179,96 +179,153 @@ number of word forms for the same lexeme.  Thus, we need to be able to group mor
 %-----------------------------------------------------
 \section{Resources} \label{sect:resources}
 
+\noindent{\em Wikipedia}\\
+
+\todo{Markup removed, interlingual links used to pair up pages between English and another language.  Done for 43 languages.  Have topic information for the topic similarity cue. To keep them comparable, we extracted pages with interlanguage links - stats. \tabref{fig:wikidictstats} shows our 42 languages of interest and the number of Wikipedia articles with interlingual links to their English counterparts.} \\ 
+ 
+\begin{table}[h!]
+\footnotesize
+\begin{center}
+\begin{tabular}{lrrrrr}
+Language		&	Wikipedia	&	\multicolumn{3}{c}{Dictionary}\\
+\cline{3-5}
+	&	pages	&	entries	&	src token/type	&	script \\
+	&	&	&	coverage (\%) \\
+\hline
+Tigrinya	&	36	&	56	&	0.3/0.6	&	r\\
+Punjabi 	&	401	&	76,311	&	12.2/57.7	&	r/o\\ 	
+Kyrgyz	&	492	&	74,890	&	2.6/42.4	&	r\\
+Somali 	&	585	&	230	&	0.2/6.8	&	r\\ 	
+Nepali 	&	1,293	&	6,812	&	3.6/39.7	&	r\\
+Tibetan	&	1,358	&	59,083	&	2.5/35.1	&	r\\
+Uighur	&	1,814	&	16,285	&	1.7/37.9	&	r\\
+Maltese 	&	1,896	&	7,574	&	2.9/44.7	&	r\\
+Turkmen	&	3,137	&	91,928	&	4.6/54	&	r\\
+Kazakh 	&	3,470	&	145,750	&	1/34	&	r\\
+Mongolian 	&	4,009	&	948	&	0.3/20.7	&	r\\
+Tatar		&	4,180	& 8,557	&	1.7/33	&	c/r\\
+Kurdish	&	5,059	&	9,870	&	1.2/32	&	r\\
+Uzbek 	&	5,875	&	190,688	&	6.2/66.4	&	r\\
+Kapampangan	&	6,827	&	1,000	&	0.2/7	&	r\\
+Urdu 	&	7,674	&	36,428	&	2.9/57.1	&	r\\
+Irish	&	9,859	&	887&	0.2/23.5	&	r\\
+Azeri	&	12,568	&	231,891&	0.6/42.7	&	r\\
+Tamil	&	13,470	&	165,004	&	2.6/43.6	&	o\\
+Albanian 	&	13,714	&	188,563	&	5.4/55.6	&	r\\
+Afrikaans	&	14,315	&	11,389	&	0.8/50.2	&	r\\
+Hindi 	&	14,824	&	58,179	&	2.2/37.7	&	r\\
+Bangla 	&	16,026	&	1,606	&	0.2/20.6	&	o/r\\
+Tagalog	&	17,757	&	247,662	&	3.5/65.8	&	r\\
+Latvian	&	22,737	&	148,363	&	3.9/65.5	&	r\\
+Bosnian 	&	23,144	&	18,283	&	1/44.5	&	r\\
+Welsh	&	25,292	&	25,832	&	2/50.1	&	r\\
+Latin 	&	31,195	&	18,884	&	0.9/36.3	&	r\\
+Basque 	&	38,594	&	880	&	0.1/7	&	r\\
+Thai	&	40,182	&14,925	&	0.5/36.4	&	o\\
+Farsi	&	58,651	&198,605	&	2.6/60.5	&	a/r\\
+Bulgarian 	&	68,446	&	316,631	&	3/66.3	&	c/r\\
+Serbian	&	71,018	&	168,140	&	3.7/71.2	&	r\\
+Indonesian 	&	73,962	&	67,633	&	1.1/61.5	&	r\\
+Slovak 	&	76,421	&	233,093	&	2.6/65	&	r\\
+Korean	&	84,385	&	229,742	&	2.2/66.5	&	k\\
+Turkish 	&	86,277	&	1,272,881	&	3.3/47.9	&	r\\
+Ukrainan	&	91,022	&	14,056	&	0.5/35.3	&	r\\
+Romanian	&	97,351	&	249,479	&	2.4/64.3	&	r\\
+Russian	&	295,944	&	423,009	&	1.6/57.5	&	c\\
+Spanish 	&	371,130	&	347,441	&	1.7/54.7	&	r\\
+Polish	&	438,053	&	261,463	&	1.3/57.8	&	r\\
+\end{tabular}
+\end{center}
+\normalsize
+\caption{Number of Wikipedia pages that have interlanguage links with English, along with dictionary statistics.  The last column contains the dictionary script: roman (r), cyrillic (c), arabic (a), korean (k), or other (o).}
+\label{fig:wikidictstats}
+\end{table}
+
+\mtodo{Cannot find the coverage run logs.  Compare some to Ben's runs.  Check dict num tokens.}
+
+
 \noindent{\em News wire}\\ 
 
 \todo{Markup removed language identified, and temporal information extracted. Up to 10 years of temporal data for 23 languages. A substantial portion of the collected data still needs to be processed for language and time.}\\
 
-\noindent{\em Wikipedia}\\
+\todo{What is whown in the table {\bf is} language id'd and time stamp extracted.  LAnguage from URL, time from URL or page body. A large section of crawled data is not id'd}
 
-\todo{Markup removed, interlingual links used to pair up pages between English and another language.  Done for 43 languages.  Have topic information for the topic similarity cue. To keep them comparable, we extracted pages with interlanguage links - stats.  Table \ref{lang-table} shows our 42 languages of interest and the number of Wikipedia articles with interlingual links to their English counterparts.} \\ 
- 
-\begin{table}[h]
-\small
+50000 or more tokens, see section blah for technical details.
+
+\begin{table}[h!]
+\setlength{\tabcolsep}{1ex}
+\footnotesize
 \begin{center}
-\begin{tabular}{cc|cc}
-Tigrinya	&	36	&	Punjabi 	&	401	\\ 	
-Kyrgyz	&	492	&	Somali 	&	585	\\ 	
-Nepali 	&	1293	&	Tibetan	&	1358\\
-Uighur	&	1814	&	Maltese 	&	1896\\
-Turkmen	&	3137	&	Kazakh 	&	3470\\
-Mongolian 	&	4009	&	Tatar	&	4180\\
-Kurdish	&	5059	&	Uzbek 	&	5875\\
-Kapampangan	&	6827	&	Urdu 	&	7674\\
-Irish 	&	9859	&	Azeri	&	12568\\
-Tamil	&	13470	&	Albanian 	&	13714\\
-Afrikaans	&	14315	&	Hindi 	&	14824\\
-Bangla 	&	16026	&	Tagalog	&	17757\\
-Latvian	&	22737	&	Bosnian 	&	23144\\
-Welsh	&	25292	&	Latin 	&	31195\\
-Basque 	&	38594	&	Thai	&	40182\\
-Farsi	&	58651	&	Bulgarian 	&	68446\\
-Serbian	&	71018	&	Indonesian 	&	73962\\
-Slovak 	&	76421	&	Korean	&	84385\\
-Turkish 	&	86277	&	Ukrainan	&	91022\\
-Romanian 	&	97351	&	Russian	&	295944\\
-Spanish 	&	371130	&	Polish	&	438053\\
-
+\begin{tabular}{lrrrrrrrrrrrr}
+Language		&	\multicolumn{11}{c}{Pages per year}	&	Total\\
+\cline{2-12}
+	&	'00	&	'01	&	'02		&	'03	&	'04		&	'05		&	'06	&	'07	&	'08	&	'09	&	'10	&	tokens\\
+\hline
+Kyrgyz	&	-	&	-	&	-	&	-	&	-	&	-	&	1	&	7	&	5	&	15	&	40	&	126,217\\
+Somali	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	28	&	113	&	64	&	421,589\\
+Nepali	&	-	&	-	&	-	&	-	&	1	&	3	&	4	&	2	&	6	&	13	&	8	&	59,309\\
+Kazakh	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	1	&	45	&	32	&	1,839,748\\
+Uzbek	&	-	&	-	&	-	&	-	&	-	&	-	&	22	&	29	&	79	&	49	&	33	&	507,320\\
+Urdu	&	-	&	-	&	1	&	44	&	33	&	8	&	36	&	30	&	76	&	281	&	98	&	2,874,969\\
+%Azeri	&	-	&	-	&	-	&	-	&	2	&	2	&	-	&	-	&	4	&	5	&	7	&	35,812\\
+Tamil	&	-	&	-	&	-	&	-	&	-	&	1	&	1	&	1	&	13	&	28	&	27	&	61,990\\
+Albanian	&	1	&	-	&	-	&	-	&	2	&	26	&	13	&	98	&	94	&	120	&	70	&	828,005\\
+Hindi	&	-	&	14	&	181	&	285	&	283	&	332	&	334	&	325	&	331	&	349	&	102	&	12,589,950\\
+Bangla	&	-	&	-	&	-	&	-	&	-	&	1	&	1	&	-	&	4	&	18	&	29	&	129,984\\
+Latvian	&	-	&	1	&	1	&	1	&	1	&	1	&	3	&	21	&	178	&	341	&	75	&	28,309,813\\
+Bosnian	&	-	&	-	&	-	&	-	&	-	&	-	&	1	&	-	&	-	&	-	&	41	&	79,206\\
+Welsh	&	-	&	2	&	-	&	142	&	245	&	129	&	1	&	1	&	1	&	5	&	-	&	2,603,551\\
+Farsi	&	-	&	10	&	49	&	114	&	160	&	301	&	297	&	339	&	366	&	365	&	109	&	26,041,987\\
+%Bulgarian	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	1	&	-	&	27	&	-	&	896\\
+Serbian	&	-	&	1	&	1	&	-	&	-	&	-	&	3	&	-	&	14	&	84	&	19	&	221,503\\
+Indonesian	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	1	&	1	&	59	&	99	&	1,135,783\\
+Slovak	&	1	&	-	&	-	&	-	&	1	&	1	&	-	&	158	&	356	&	364	&	100	&	103,732,925\\
+Turkish	&	-	&	-	&	-	&	1	&	7	&	12	&	8	&	9	&	24	&	153	&	69	&	1,135,200\\
+Ukrainan	&	-	&	-	&	-	&	15	&	26	&	30	&	70	&	89	&	164	&	102	&	76	&	1,254,852\\
+%Romanian	&	4	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	5059\\
+Russian	&	46	&	365	&	363	&	353	&	350	&	353	&	353	&	358	&	365	&	365	&	100	&	47,857,954\\
+Spanish	&	-	&	313	&	352	&	364	&	366	&	365	&	365	&	365	&	366	&	365	&	104	&	59,732,042\\
+%Polish	&	-	&	-	&	-	&	-	&	1	&	-	&	-	&	-	&	-	&	-	&	-	&	1074\\
+English	&	366	&	365	&	365	&	365	&	366	&	365	&	365	&	365	&	366	&	365	&	187	&	1,090,171,115\\
+Arabic	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	144	&	100	&	1,189,680\\
+%Czech	&	2	&	-	&	-	&	-	&	-	&	-	&	1	&	1	&	1	&	-	&	-	&	2,634\\
+%German	&	-	&	-	&	-	&	-	&	-	&	1	&	1	&	-	&	-	&	-	&	-	&	1,571\\
+%Finnish	&	-	&	-	&	-	&	-	&	1	&	-	&	-	&	-	&	-	&	-	&	-	&	920\\
+%Galician	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	4	&	-	&	69\\
+%Croatian	&	2	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	1,640\\
+%Italian	&	1	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	2	&	-	&	1,243\\
+%Macedonian	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	8	&	-	&	154\\
+%Malay	&	4	&	5	&	3	&	-	&	-	&	-	&	1	&	1	&	1	&	3	&	-	&	36,098\\
+%Dutch	&	1	&	-	&	-	&	-	&	1	&	-	&	-	&	-	&	-	&	-	&	-	&	2,356\\
+%Norwegian	&	2	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	2,780\\
+Pashto	&	-	&	-	&	-	&	-	&	-	&	3	&	10	&	9	&	7	&	26	&	37	&	520,450\\
+%Portuguese	&	2	&	-	&	1	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	3,604\\
+%Slovenian	&	5	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	19,771\\
+%Swedish	&	1	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	1,902\\
+%Tajik	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	-	&	1	&	-	&	14\\
+Chinese	&	-	&	-	&	-	&	-	&	-	&	5	&	1	&	6	&	7	&	14	&	32	&	1,864,565\\
 \end{tabular}
 \end{center}
 \normalsize
-\caption{Our 42 languages of interest and the number of Wikipedia pages for each that have interlanguage links with English.\todo{add dictionary info and coverage}}
-\label{lang-table}
+\caption{Crawled newswire pages with identified language and publication date information.}
+\label{fig:newsstats}
 \end{table}
- 
+
+\mtodo{Note: Be's runs used an older crawl April.}
+
 \noindent{\em Dictionaries and stopword lists}\\ 
 
-\todo{Talk about the fact that they are noisy, romanized.  Evaluation results are conservative.  \todo{Include wiki src/trg dictionary coverage, and whether or not useful directly (e.g. romanized)}}\\
+
+\todo{Talk about the fact that they are noisy, romanized.  Evaluation results are conservative.  \todo{Include wiki src/trg dictionary coverage, and whether or not useful directly (e.g. romanized)}} Mention that if a stop word list is absent we cut out 200 most frequent words.\\
+
+Dictionaries were obtained: Dictionary source: electronic dictionary (i) / ocr (o) / derived via nlp experiment (d)
+
+We have also collected stop words for Farsi, Bangla, Hindi, Polish, Spanish, Russian, Romanian, and English.  For languages which do not have a stop word lists, we remove 200 most frequent words.
+
 
 \noindent{\em Parallel texts}\\
 
 \todo{MT Workshop data, some are time stamped.  We use one language pair to figure an upper bound. How many days and tokens.}\\
-
-%\begin{table}[h]
-%\begin{center}
-%%\small
-%%\vspace{-.75cm}
-%\begin{tabular}{lrrr | lrrr}
-%Language	&	Dictionary	&	Wikipedia 	&Newswire&	Language	&	Dictionary	&	Wikipedia & Newswire	\\
-%&	entries	&	words (est.)	&words&&		entries &words		&	words\\
-%\hline
-%Polish	&	261,463	&	249,000,000	&&	Uzbek	&	190,688	&	3,100,000	 &\\
-%Russian	&	423,009	&	149,000,000	&&	Maori	&	27,967	&	2,900,000	 &\\
-%Ukrainian	&	14,056	&	59,000,000	&&	Kapampangan	&	1,000	&	2,800,000	 &\\
-%Turkish	&	1,272,881	&	54,000,000	&&	Tatar	&	8,557	&	1,700,000	\\
-%Romanian	&	249,479	&	53,000,000	&&	Kazakh	&	145,750	&	1,300,000	&\\
-%Slovak	&	233,093	&	46,000,000	&&	Nepali	&	6,812	&	1,200,000		&\\
-%Indonesian	&	67,633	&	42,000,000	&&	Maltese	&	7,574	&	1,000,000	&\\
-%Korean	&	229,742	&	36,000,000	&&	Mongolian	&	948	&	800,000	&\\
-%Serbian	&	168,140	&	31,000,000	&&	Turkmen	&	91,928	&	500,000	&\\
-%Bulgarian	&	316,631	&	29,000,000	&&	Kirghiz	&	74,890	&	300,000	&\\
-%Farsi/Persian	&	198,605	&	23,000,000	&&	Somali	&	230	&	200,000	&\\
-%Thai	&	14,925	&	18,000,000	&&	Punjabi	&	76,311	&	180,000	&\\
-%Basque	&	880	&	14,000,000	&&	Tibetan	&	59,083	&	110,000	&\\
-%Malaysian	&	9,438	&	14,000,000	&&	Tigrinya	&	56	&	80,000	&\\
-%Bosnian	&	18,283	&	11,000,000	&&	Uighur	&	16,285	&	80,000	&\\
-%Latin	&	18,884	&	11,000,000	&&		&		&		&\\
-%Hindi	&	58,179	&	10,000,000	&&	German	&	272,230	&	372,000,000	&\\
-%Albanian	&	188,563	&	9,800,000	&&	French	&	195,627	&	327,000,000	&\\
-%Azeri	&	231,891	&	9,200,000	&&	Italian	&	166,966	&	232,000,000	&\\
-%Tagalog	&	247,662	&	9,100,000	&&	Dutch	&	233,805	&	224,000,000	&\\
-%Welsh	&	25,832	&	9,000,000	&&	Portuguese	&	840	&	198,000,000	&\\
-%Bangla	&	1,606	&	8,400,000	&&	Spanish	&	347,441	&	188,000,000	&\\
-%Latvian	&	148,363	&	8,200,000	&&	Swedish	&	227,849	&	134,000,000	&\\
-%Tamil	&	165,004	&	7,200,000	&&	Chinese	&	82,080	&	95,000,000	&\\
-%Kurdish	&	9,870	&	5,400,000	&&	Czech	&	262,690	&	50,000,000	&\\
-%Afrikaans	&	11,389	&	5,000,000	&&	Hungarian	&	289,225	&	50,000,000	&\\
-%Urdu	&	36,428	&	4,100,000	&&	Arabic	&	167,189	&	37,000,000	&\\
-%Irish	&	887	&	3,400,000	&&	Greek	&	160,126	&	17,000,000	&\\
-%\end{tabular}
-%%\normalsize
-%\end{center}
-%\caption{The number of entries in the bilingual dictionaries assembled at JHU, estimated number of words contained in each of the language-specific versions of Wikipedia, and the number of words contained in each of the collected newswire datrasets.  The languages which have been extensively studied in statistical machine translation literature are given in the lower right corner. }\label{fig:datastats}
-%\end{table}
 
 %-----------------------------------------------------
 \section{Experimental Evaluation}
@@ -281,38 +338,44 @@ As we have pointed out, one of the objectives of this work is to induce lexicons
 
 \subsection{Lexicon induction for a high-resource language pair}
 
-We begin by evaluating the relative performance of lexicons induced from contextual, temporal, and orthographic cues as well as the MRR rank aggregation scheme on the English-Spanish EuroParl parallel data  for inducing translations for a \emph{random} 1000 words in our test dictionary (\figref{fig:exp1}, top).  The corpus is time stamped (spanning 656 days) and perfectly \emph{temporally} aligned, so it is not surprising that the temporal cue provides a strong signal for inducing translations.  All of these cues are informative and orthogonal, so combining them substantially improves results with $70\%$ and  $79\%$ accuracy at top 100 and 500, respectively.  \\
+We begin by evaluating the relative performance of lexicons induced from contextual, temporal, and orthographic cues as well as the MRR rank aggregation scheme on the English-Spanish EuroParl parallel data for inducing translations for most frequent and random 1000 words source present in our test dictionary (top left and right of \figref{fig:exp1}, respectively). The corpus is time stamped (spanning 656 days) and perfectly \emph{temporally} aligned, so it is not surprising that the temporal cue provides a strong signal for inducing translations.  All of these cues are informative and orthogonal, so combining them substantially improves results with $73\%$ and  $82\%$ accuracy at top 100 and 500 for most frequent source words, and $70\%$ and  $79\%$, respectively, for random source tokens.  \\
 
 \begin{figure}[h!]
-\centerline{\mbox{\includegraphics[width=3in]{figures/exp1/parallel.rand/parallel}}}
-\centerline{\mbox{\includegraphics[width=3in]{figures/exp1/wikinews.rand/wikinews}}}
-\caption{Relative accuracy on parallel en-es data (top), and wikipedia / newswire (bottom) $\leftarrow$ \todo{replace with random} for 1000 random source words.}
+\centerline{\mbox{\includegraphics[width=2.4in]{figures/exp1/parallel.freq/parfreq} \includegraphics[width=2.4in]{figures/exp1/parallel.rand/parrand}}}
+\centerline{\mbox{\includegraphics[width=2.4in]{figures/exp1/wikinews.freq/wikinewsfreq} \includegraphics[width=2.4in]{figures/exp1/wikinews.rand/wikinewsrand}}}
+\caption{Accuracy on parallel en-es data for most frequent (top left) and random (top right) 1000 source words, and on wikipedia / newswire for most frequent (bottom left) and random (bottom right) 1000 source words.}
 \label{fig:exp1}
 \end{figure}
 
-We repeat the same experiment using wikipedia and newswire data to derive dictionaries from contextual and temporal cues, respectively (\figref{fig:exp1}, bottom).  Since the newswire corpora is only weakly temporally aligned, the performance of the temporal cue drops substantially.  Still, the cues provide informative and non-redundant signals, which can be combined to obtain better quality lexicons.
+We repeat the same experiment using wikipedia and newswire data to derive dictionaries from contextual and temporal cues, respectively (\figref{fig:exp1}, bottom).  Since the newswire corpora is only weakly temporally aligned, the performance of the temporal cue drops substantially.  Still, the cues provide informative and non-redundant signals, which can be combined to obtain better quality lexicons.  Notice the substantial drop in performance (about {\bf 19\%}) for randomly selected source tokens.  While not entirely surprising, it supports our observation that evaluating on frequent source words alone can be misleading if the objective is to induce wide coverage dictionaries.
 
 \subsection{Context vs.\ alignments} 
 
-Word alignments can be induced directly from sentence aligned corpora.  In this set of experiments, we compare bilingual lexicons derived from word alignments (produced by GIZA++) to those generated from the contextual cue alone on the English-Spanish section of the EuroParl corpus (see \figref{fig:exp2}).  Unsurprisingly, word alignments induce a much more informative signal than context alone, but sufficient sentence aligned bilingual data is not available for most of the low resource languages we consider in this work.\\
+Word alignments can be induced directly from sentence aligned corpora.  In this set of experiments, we compare bilingual lexicons derived from word alignments (produced by GIZA++) to those generated from the contextual cue alone on the English-Spanish section of the EuroParl corpus (see \figref{fig:exp2}). While word alignments induce a much more informative signal than context alone, sufficient sentence aligned bilingual data is not available for most of the low resource languages we consider in this work.\\
 
 \begin{figure}[h!]
 \centerline{\mbox{\includegraphics[width=3in]{figures/exp2/alignvscontext}}}
-\caption{Relative accuracy of lexicons induced from alignments and context on parallel en-es data for random and most frequent 1000 source words.}
+\caption{Accuracy of lexicons induced from alignments and context on parallel en-es data for random and most frequent 1000 source words.}
 \label{fig:exp2}
 \end{figure}
 
-We also compare the induced lexicon accuracy for random and most frequent 1000 source words.  The substantial gap in performance highlights that evaluating on most frequent source words alone can be misleading if the objective is to induce wide coverage dictionaries.
-
 \subsection{Lexicon induction for a low-resource languages}
 
-\todo{Candidates and context from wiki, and time from newswire for (18?) languages and English.}
+\todo{Candidates and context from wiki, and time from newswire for 10 languages and English.}
+
+\begin{figure}[h!]
+\centerline{\mbox{\includegraphics[width=2.4in]{figures/exp3/freq/freqcontext} \includegraphics[width=2.4in]{figures/exp3/rand/randcontext}}}
+\centerline{\mbox{\includegraphics[width=2.4in]{figures/exp3/freq/freqtime} \includegraphics[width=2.4in]{figures/exp3/rand/randtime}}}
+\centerline{\mbox{\includegraphics[width=2.4in]{figures/exp3/freq/freqmrr} \includegraphics[width=2.4in]{figures/exp3/rand/randmrr}}}
+\caption{Accuracy of contextual (top) and temporal (middle) cues and the MRR heuristic (bottom) for most frequent (left) and random (right) 1000 source words for Welsh (cy), Farsi (fa), Indonesian (id), Latvian (lv), Russian (ru), Slovak (sk), Albanian (sq), Serbian (sr), Turkish (tr), and Uzbek (uz).}
+\label{fig:exp1}
+\end{figure}
 
 \subsection{Crowd-sourcing annotation}
 
 We use our existing bilingual dictionaries to induce large bilingual lexicons via the contextual cue and to evaluate their accuracy.  However, these dictionaries vary substantially in quality and coverage across languages and corpora (see \secref{sect:resources}).  In this set of experiments we study \cite{Irvine:2010} the viability of crown-sourcing translations for a low-resource languages specifically for use in our induction framework.  First, we use the contextual cue to induce lexical translation pairs from the Wikipedia monolingual data. Then, we pay Amazon Mechanical Turk (MTurk) workers a small amount to check and correct our system output. We can then use the updated lexicons to inform another iteration of lexicon induction, gather a second set of MTurk annotations, and so on. \\
 
-For 32 of the 42 languages in \tabref{lang-table}, we were able to induce lexical translation candidates and post them on MTurk for annotation. For these languages we presented annotators with top ten scored candidates for a set of 100 English words and asked them to mark correct translations. If our seed dictionary included an entry for a source word, we included the translation in the candidate list as a positive control. Additionally, we included a random word in the foreign language as a negative control.  We do not have dictionaries for the remaining 10 languages, so we asked workers to type translations for 100 English words. We had three distinct workers provide such annotations for each source word. \\ 
+For 32 of the 42 languages in \tabref{fig:wikidictstats}, we were able to induce lexical translation candidates and post them on MTurk for annotation. For these languages we presented annotators with top ten scored candidates for a set of 100 English words and asked them to mark correct translations. If our seed dictionary included an entry for a source word, we included the translation in the candidate list as a positive control. Additionally, we included a random word in the foreign language as a negative control.  We do not have dictionaries for the remaining 10 languages, so we asked workers to type translations for 100 English words. We had three distinct workers provide such annotations for each source word. \\ 
 
 \begin{figure}[h!]
 \centerline{\mbox{\includegraphics[width=5in]{figures/exp4/time}}}
@@ -338,7 +401,7 @@ In this section we touch on some of the implementation details of the lexicon in
 
 \subsection{Data Collection}
 
-While some monolingual resources (see \secref{sect:resources}) are static, others require ongoing collection.  We have set up the nutch crawler\footnote{http://nutch.apache.org/} to continuously crawl a number of web sites generating news content in the languages of interest.  The crawl results are periodically processed (see \figref{fig:data}) to (1) parse page content and extract metadata associated with the page, (2) merge with previously extracted pages, (3) identify language of the page content, and (4) generate time annotated corpora for each of the languages.  See \tabref{fig:datastats} for a current summary of the collected data.
+While some monolingual resources (see \secref{sect:resources}) are static, others require ongoing collection.  We have set up the nutch crawler\footnote{http://nutch.apache.org/} to continuously crawl a number of web sites generating news content in the languages of interest.  The crawl results are periodically processed (see \figref{fig:data}) to (1) parse page content and extract metadata associated with the page, (2) merge with previously extracted pages, (3) identify language of the page content, and (4) generate time annotated corpora for each of the languages.  See \tabref{fig:wikidictstats} for a current summary of the collected data.
 
 \begin{figure}[h]
 \centerline{\mbox{\includegraphics[width=3in]{figures/datacollect}}}

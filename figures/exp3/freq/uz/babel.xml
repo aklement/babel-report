@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+<corpora>
+	<wiki>
+		<Path>/mnt/data/wiki/pagepairs/en-uz/letters</Path>
+		<SrcRegExp>.*\\.en</SrcRegExp>
+		<TrgRegExp>.*\\.uz</TrgRegExp>
+	</wiki>
+	<crawls>
+		<Path>/mnt/data/babel/Resources/Crawls/Crawls.042310</Path>
+		<SrcSubDir>en/</SrcSubDir>
+		<TrgSubDir>uz/</TrgSubDir>
+		<DateFrom>00-01-01</DateFrom>
+		<DateTo>10-04-20</DateTo>
+	</crawls>
+	<europarl>
+		<Path>/mnt/data/babel/Resources/EuroParl/uz-en</Path>
+		<SrcSubDir>en/</SrcSubDir>
+		<TrgSubDir>uz/</TrgSubDir>
+		<DateFrom>96-04-15</DateFrom>
+		<DateTo>06-10-13</DateTo>
+	</europarl>
+</corpora>
+<resources>
+	<stopwords>
+		<Path>/mnt/data/babel/Resources/StopWordLists/</Path>
+		<SrcStopWords>en.stop</SrcStopWords>
+		<TrgStopWords></TrgStopWords>
+	</stopwords>
+	<dictionary>
+		<Path>/mnt/data/babel/Resources/Dictionaries/</Path>
+		<Dictionary>en-uz.dict</Dictionary>
+	</dictionary>
+</resources>
+<preprocessing>
+	<Path>./a02/uz/preprocessing/</Path>
+	<FilterRomanTrg>false</FilterRomanTrg>
+	<input>
+		<Context>wiki</Context>
+		<Time>crawls</Time>
+	</input>
+	<context>
+		<SrcEqClass>babel.content.eqclasses.SimpleEquivalenceClass</SrcEqClass>
+		<TrgEqClass>babel.content.eqclasses.SimpleEquivalenceClass</TrgEqClass>
+		<PruneEqIfOccursMoreThan>-1</PruneEqIfOccursMoreThan>
+		<PruneEqIfOccursFewerThan>5</PruneEqIfOccursFewerThan>
+		<PruneContextToSize>-1</PruneContextToSize>
+		<Window>2</Window>
+	</context>
+	<candidates>
+		<SrcEqClass>babel.content.eqclasses.SimpleEquivalenceClass</SrcEqClass>
+		<TrgEqClass>babel.content.eqclasses.SimpleEquivalenceClass</TrgEqClass>
+		<PruneIfOccursMoreThan>-1</PruneIfOccursMoreThan>
+		<PruneIfOccursFewerThan>10</PruneIfOccursFewerThan>
+		<PruneMostFrequentSrc>-1</PruneMostFrequentSrc>
+		<PruneMostFrequentTrg>200</PruneMostFrequentTrg>
+	</candidates>
+	<time>
+		<Align>true</Align>
+	</time>
+</preprocessing>
+<output>
+	<Path>./a02/uz/output/</Path>
+</output>
+<experiments>
+	<time>
+		<SlidingWindow>true</SlidingWindow>
+		<WindowSize>5</WindowSize>
+	</time>
+	<RandomSource>false</RandomSource>
+	<NumSource>1000</NumSource>
+	<NumTranslationsToAddPerSource>500</NumTranslationsToAddPerSource>
+	<DictionaryPercentToUse>0.9</DictionaryPercentToUse>
+	<DictionaryPruneNumTranslations>-1</DictionaryPruneNumTranslations>
+	<NumRankingThreads>5</NumRankingThreads>	
+	<DoTime>true</DoTime>
+	<DoContext>true</DoContext>
+	<DoEditDistance>false</DoEditDistance>
+	<DoAggregate>true</DoAggregate></experiments>
+</configuration>

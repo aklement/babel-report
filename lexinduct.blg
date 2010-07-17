@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99c (Web2C 7.5.7)
+The top-level auxiliary file: lexinduct.aux
+The style file: apalike.bst
+Database file #1: references.bib
+Warning--I didn't find a database entry for "Deerwester:1990"
+Warning--I didn't find a database entry for "Goldwater:2006"
+You've used 16 entries,
+            1935 wiz_defined-function locations,
+            614 strings with 8287 characters,
+and the built_in function-call counts, 6311 in all, are:
+= -- 597
+> -- 235
+< -- 15
++ -- 78
+- -- 76
+* -- 442
+:= -- 1047
+add.period$ -- 48
+call.type$ -- 16
+change.case$ -- 118
+chr.to.int$ -- 16
+cite$ -- 16
+duplicate$ -- 324
+empty$ -- 517
+format.name$ -- 108
+if$ -- 1320
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 16
+newline$ -- 83
+num.names$ -- 48
+pop$ -- 183
+preamble$ -- 1
+purify$ -- 118
+quote$ -- 0
+skip$ -- 192
+stack$ -- 0
+substring$ -- 306
+swap$ -- 52
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 96
+warning$ -- 0
+while$ -- 40
+width$ -- 0
+write$ -- 198
+(There were 2 warnings)
