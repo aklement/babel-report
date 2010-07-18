@@ -7,7 +7,7 @@ tsize <- 1.6
 t1size <- 1.3
 
 xrange <- range(0, 600)
-yrange <- range(0, 50)
+yrange <- range(0, 40)
 
 png(filename="freqcontext.png", height=500, width=600, bg="white")
 

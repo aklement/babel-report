@@ -2,47 +2,46 @@ This is BibTeX, Version 0.99c (Web2C 7.5.7)
 The top-level auxiliary file: lexinduct.aux
 The style file: apalike.bst
 Database file #1: references.bib
-Warning--I didn't find a database entry for "Deerwester:1990"
 Warning--I didn't find a database entry for "Goldwater:2006"
-You've used 16 entries,
+You've used 14 entries,
             1935 wiz_defined-function locations,
-            614 strings with 8287 characters,
-and the built_in function-call counts, 6311 in all, are:
-= -- 597
-> -- 235
-< -- 15
-+ -- 78
-- -- 76
-* -- 442
-:= -- 1047
-add.period$ -- 48
-call.type$ -- 16
-change.case$ -- 118
-chr.to.int$ -- 16
-cite$ -- 16
-duplicate$ -- 324
-empty$ -- 517
-format.name$ -- 108
-if$ -- 1320
+            606 strings with 8115 characters,
+and the built_in function-call counts, 5396 in all, are:
+= -- 502
+> -- 219
+< -- 11
++ -- 72
+- -- 72
+* -- 394
+:= -- 919
+add.period$ -- 42
+call.type$ -- 14
+change.case$ -- 106
+chr.to.int$ -- 14
+cite$ -- 14
+duplicate$ -- 266
+empty$ -- 434
+format.name$ -- 98
+if$ -- 1105
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 16
-newline$ -- 83
-num.names$ -- 48
-pop$ -- 183
+missing$ -- 14
+newline$ -- 73
+num.names$ -- 42
+pop$ -- 158
 preamble$ -- 1
-purify$ -- 118
+purify$ -- 106
 quote$ -- 0
-skip$ -- 192
+skip$ -- 150
 stack$ -- 0
-substring$ -- 306
-swap$ -- 52
-text.length$ -- 4
+substring$ -- 245
+swap$ -- 32
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 96
+type$ -- 84
 warning$ -- 0
-while$ -- 40
+while$ -- 33
 width$ -- 0
-write$ -- 198
-(There were 2 warnings)
+write$ -- 173
+(There was 1 warning)
