@@ -5,6 +5,7 @@
 %\usepackage{subfigure}
 \usepackage{listings}
 \usepackage[OT2,OT1]{fontenc} % Used for in-line transliterated cyrillic
+\usepackage{stmaryrd}
 
 \definecolor{red}{rgb}{1,0,0}
 \definecolor{red}{rgb}{0,0,1}
@@ -31,7 +32,7 @@
 %keywordstyle=\color{black}\bfseries\underbar,
 keywordstyle=\color{blue}\bfseries\underbar,
 language=XML,                % choose the language of the code
-basicstyle= \tiny\tt,       % the size of the fonts that are used for the code
+basicstyle= \footnotesize\tt,       % the size of the fonts that are used for the code
 %numbers=left,                   % where to put the line-numbers
 %numberstyle=\tiny\tt,      % the size of the fonts that are used for the line-numbers
 %stepnumber=1,                   % the step between two line-numbers. If it's 1 each line  will be numbered
@@ -128,7 +129,7 @@ Various linguistic and corpus cues can be informative for relating word translat
 \label{fig:contextual}
 \end{figure}
 
-\noindent\emph{Temporal cue.} Online content is often published along with temporal information: news feeds, for example, are comprised of news stories annotated with date and time of publication.  The feeds are specialized for the target geographical locations and vary in content across languages.  Still, many events are deemed relevant to multiple audiences and the news stories related to them appear in several languages, although rarely as direct translations of one another.  Words associated with these events will appear with increased frequency in multiple languages around the dates when these events are reported.  \figref{fig:temporal} illustrates this idea with temporal histograms of three English words and their Spanish translations. Such weak synchronicity provides a cue about the relatedness of words across the two languages, and can be exploited to associate them.  In order to score a pair of entities across languages, we can compute the similarity of their temporal signatures.\mtodo{\figref{fig:temporal} is from EuroParl, add the one from the proposal instead.}\\
+\noindent\emph{Temporal cue.} Online content is often published along with temporal information: news feeds, for example, are comprised of news stories annotated with date and time of publication.  The feeds are specialized for the target geographical locations and vary in content across languages.  Still, many events are deemed relevant to multiple audiences and the news stories related to them appear in several languages, although rarely as direct translations of one another.  Words associated with these events will appear with increased frequency in multiple languages around the dates when these events are reported.  \figref{fig:temporal} illustrates this idea with temporal histograms of three English words and their Spanish translations. Such weak synchronicity provides a cue about the relatedness of words across the two languages, and can be exploited to associate them.  In order to score a pair of entities across languages, we can compute the similarity of their temporal signatures.\mtodo{\figref{fig:temporal} is from Europarl, add the one from the proposal instead.}\\
 
 \begin{figure}[h]
 \centerline{\mbox{\includegraphics[width=2.8in]{figures/temporal}}}
@@ -167,78 +168,85 @@ In this section we briefly describe each of the resources we use for inducing tr
 
 \noindent{\em Wikipedia}. Wikipedia provides a large repository of continuously edited monolingual texts in a large number of languages.  Besides the article content, it also contains various metadata which can be useful for generating additional resources.  For example,
 % category information associated with each article can be used induce the topic cue, and 
-interlingual links can be used to select articles discussing the same subject across multiple languages.  We will use these comparable articles when inducing translations using the contextual cue in \secref{sect:experiments}.  \tabref{fig:wikidictstats} lists counts of such page pairs between English and 42 other languages.\\
+interlingual links can be used to select articles discussing the same subject across multiple languages.  We will use these comparable articles when inducing translations using the contextual cue in \secref{sect:experiments}.  \tabref{fig:wikidictstats} lists counts of such page pairs between English and 42 other languages along with the second language scripts used predominantly\footnote{While Uzbek, Serbian, Azeri, Kurdish, Kazakh, Uighur, and Somali use multiple writing systems, we indicate only those used for the bulk of Wikipedia articles.} in the corresponding wikis.\\
  
 \begin{table}[h!]
+\setlength{\tabcolsep}{1ex}
 \footnotesize
 \begin{center}
-\begin{tabular}{lrrrrr}
-Language		&	Wikipedia	&	\multicolumn{3}{c}{Dictionary}\\
-\cline{3-5}
-	&	page pairs	&	entries	&	src type/token	&	script \\
-	&	&	&	coverage (\%) \\
+\begin{tabular}{l|rrr|rrr|}
+\multicolumn{1}{c}{}	&	\multicolumn{3}{c}{Wikipedia}	&	\multicolumn{3}{c}{Dictionary}\\
+%\hline
+\cline{2-7}% \cline{4-6}
+Language	& page pairs	&	trg tokens	&	script	&	entries	&	src type/token	&	script \\
+	&	& (thousands)	&	&	&	coverage (\%) &\\
 \hline
-Tigrinya	&	36	&	56	&	0.3/0.6	&	r\\
-Punjabi 	&	401	&	76,311	&	12.2/57.7	&	r/o\\ 	
-Kyrgyz	&	492	&	74,890	&	2.6/42.4	&	r\\
-Somali 	&	585	&	230	&	0.2/6.8	&	r\\ 	
-Nepali 	&	1,293	&	6,812	&	3.6/39.7	&	r\\
-Tibetan	&	1,358	&	59,083	&	2.5/35.1	&	r\\
-Uighur	&	1,814	&	16,285	&	1.7/37.9	&	r\\
-Maltese 	&	1,896	&	7,574	&	2.9/44.7	&	r\\
-Turkmen	&	3,137	&	91,928	&	4.6/54	&	r\\
-Kazakh 	&	3,470	&	145,750	&	1/34	&	r\\
-Mongolian 	&	4,009	&	948	&	0.3/20.7	&	r\\
-Tatar		&	4,180	& 8,557	&	1.7/33	&	c/r\\
-Kurdish	&	5,059	&	9,870	&	1.2/32	&	r\\
-Uzbek 	&	5,875	&	190,688	&	6.2/66.4	&	r\\
-Kapampangan	&	6,827	&	1,000	&	0.2/7	&	r\\
-Urdu 	&	7,674	&	36,428	&	2.9/57.1	&	r\\
-Irish	&	9,859	&	887&	0.2/23.5	&	r\\
-Azeri	&	12,568	&	231,891&	0.6/42.7	&	r\\
-Tamil	&	13,470	&	165,004	&	2.6/43.6	&	o\\
-Albanian 	&	13,714	&	188,563	&	5.4/55.6	&	r\\
-Afrikaans	&	14,315	&	11,389	&	0.8/50.2	&	r\\
-Hindi 	&	14,824	&	58,179	&	2.2/37.7	&	r\\
-Bangla 	&	16,026	&	1,606	&	0.2/20.6	&	o/r\\
-Tagalog	&	17,757	&	247,662	&	3.5/65.8	&	r\\
-Latvian	&	22,737	&	148,363	&	3.9/65.5	&	r\\
-Bosnian 	&	23,144	&	18,283	&	1/44.5	&	r\\
-Welsh	&	25,292	&	25,832	&	2/50.1	&	r\\
-Latin 	&	31,195	&	18,884	&	0.9/36.3	&	r\\
-Basque 	&	38,594	&	880	&	0.1/7	&	r\\
-Thai	&	40,182	&14,925	&	0.5/36.4	&	o\\
-Farsi	&	58,651	&198,605	&	2.6/60.5	&	a/r\\
-Bulgarian 	&	68,446	&	316,631	&	3/66.3	&	c/r\\
-Serbian	&	71,018	&	168,140	&	3.7/71.2	&	r\\
-Indonesian 	&	73,962	&	67,633	&	1.1/61.5	&	r\\
-Slovak 	&	76,421	&	233,093	&	2.6/65	&	r\\
-Korean	&	84,385	&	229,742	&	2.2/66.5	&	k\\
-Turkish 	&	86,277	&	1,272,881	&	3.3/47.9	&	r\\
-Ukrainan	&	91,022	&	14,056	&	0.5/35.3	&	r\\
-Romanian	&	97,351	&	249,479	&	2.4/64.3	&	r\\
-Russian	&	295,944	&	423,009	&	1.6/57.5	&	c\\
-Spanish 	&	371,130	&	347,441	&	1.7/54.7	&	r\\
-Polish	&	438,053	&	261,463	&	1.3/57.8	&	r\\
+Tigrinya	&	36	&	3	&	o	&	56	&	0.3/0.6	&	{\bf r}\\
+Punjabi 	&	401	&	101	&	o	&	76,311	&	12.2/57.7	&	o/{\bf r}\\ 	
+Kyrgyz	&	492	&	77	&	c	&	74,890	&	2.6/42.4	&	{\bf r}\\
+Somali 	&	585	&	82	&	r	&	230	&	0.2/6.8	&	r\\ 
+Nepali 	&	1,293	&	262	&	d	&	6,812	&	3.6/39.7	&	{\bf r}\\
+Tibetan	&	1,358	&	35	&	i	&	59,083	&	2.5/35.1	&	{\bf r}\\
+Uighur	&	1,814	&	114	&	a/r	&	16,285	&	1.7/37.9	&	r\\
+Maltese 	&	1,896	&	706	&	r	&	7,574	&	2.9/44.7	&	r\\
+Turkmen	&	3,137	&	104	&	r	&	91,928	&	4.6/54	&	r\\
+Kazakh 	&	3,470	&	606	&	c	&	145,750	&	1/34	&	{\bf r}\\
+Mongolian 	&	4,009	&	847	&	c	&	948	&	0.3/20.7	&	{\bf r}\\
+Tatar		&	4,180	&	313	&	c/r	&	 8,557	&	1.7/33	&	c/r\\
+Kurdish	&	5,059	&	872	&	r	&	9,870	&	1.2/32	&	r\\
+Uzbek 	&	5,875	&	747	&	r/c	&	190,688	&	6.2/66.4	&	r\\
+Kapampangan	&	6,827	&	875	&	r	&	1,000	&	0.2/7	&	r\\
+Urdu 	&	7,674	&	2,163	&	u	&	36,428	&	2.9/57.1	&	{\bf r}\\
+Irish	&	9,859	&	2,183	&	r	&	887&	0.2/23.5	&	r\\
+Azeri	&	12,568	&	2,518	&	r	&	231,891&	0.6/42.7	&	r\\
+Tamil	&	13,470	&	3,484	&	m	&	165,004	&	2.6/43.6	&	m\\
+Albanian 	&	13,714	&	3,197	&	r	&	188,563	&	5.4/55.6	&	r\\
+Afrikaans	&	14,315	&	4,637	&	r	&	11,389	&	0.8/50.2	&	r\\
+Hindi 	&	14,824	&	5,349	&	d	&	58,179	&	2.2/37.7	&	{\bf r}\\
+Bangla 	&	16,026	&	2,607	&	b	&	1,606	&	0.2/20.6	&	b/{\bf r}\\
+Tagalog	&	17,757	&	2,534	&	r	&	247,662	&	3.5/65.8	&	r\\
+Latvian	&	22,737	&	5,064	&	r	&	148,363	&	3.9/65.5	&	r\\
+Bosnian 	&	23,144	&	5,457	&	r	&	18,283	&	1/44.5	&	r\\
+Welsh	&	25,292	&	3,592	&	r	&	25,832	&	2/50.1	&	r\\
+Latin 	&	31,195	&	3,380	&	r	&	18,884	&	0.9/36.3	&	r\\
+Basque 	&	38,594	&	6,058	&	r	&	880	&	0.1/7	&	r\\
+Thai	&	40,182	&	5,544	&	t	&	14,925	&	0.5/36.4	&	t\\
+Farsi	&	58,651	&	12,291	&	a	&	198,605	&	2.6/60.5	&	a/{\bf r}\\
+Bulgarian 	&	68,446	&	19,045	&	c	&	316,631	&	3/66.3	&	c/{\bf r}\\
+Serbian	&	71,018	&	20,083	&	c	&	168,140	&	3.7/71.2	&	{\bf r}\\
+Indonesian 	&	73,962	&	18,021	&	r	&	67,633	&	1.1/61.5	&	r\\
+Slovak 	&	76,421	&	15,341&	r	&	233,093	&	2.6/65	&	r\\
+Korean	&	84,385	&	18,638		&	k	&	229,742	&	2.2/66.5	&	k\\
+Turkish 	&	86,277	&	22,080	&	r	&	1,272,881	&	3.3/47.9	&	r\\
+Ukrainan	&	91,022	&	22,383	&	c	&	14,056	&	0.5/35.3	&	{\bf r}\\
+Romanian	&	97,351	&	21,157	&	r	&	249,479	&	2.4/64.3	&	r\\
+Russian	&	295,944	&	105,084	&	c	&	423,009	&	1.6/57.5	&	c\\
+Spanish 	&	371,130	&	189,171	&	r	&	347,441	&	1.7/54.7	&	r\\
+Polish	&	438,053	&	96,739	&	r	&	261,463	&	1.3/57.8	&	r\\
 \end{tabular}
 \end{center}
 \normalsize
-\caption{Number of Wikipedia pages that have interlanguage links with English, along with dictionary statistics.  The last column contains the dictionary script: roman (r), cyrillic (c), arabic (a), korean (k), or other (o).}
+\caption{Wikipedia and dictionary statistics. The third and last columns contain predominant scripts in Wikipedia and dictionary scripts: Roman (r), Cyrillic (c), Arabic (a), Korean (k), Thai (t), Bangla (b), Devanagari (d), Tamil (m),  Urdu (u), Indic (i), or other (o).  Romanized dictionaries are marked in bold.}
 \label{fig:wikidictstats}
 \end{table}
 
+\mtodo{If we drop phrases, dict sizes decrease by 1/3 to 1/2}
+
 %\mtodo{Cannot find the coverage run logs.  Compare some to Ben's runs.  Check dict num tokens.}
 
-\noindent{\em Dictionaries and stopword lists.}  Dictionaries provide a crucial resource for projecting vector-base representations of equivalence classes and for evaluating the quality of induced lexicons.  \tabref{fig:wikidictstats} lists the sizes of our dictionaries, along with their coverage of the English side of the ``comparable'' bilingual Wikipedia subsets in column 2.  Type coverage measures the proportion of unique Wikipedia English words which have an entry in the dictionary, while token coverage takes into account their corpus counts. Low type coverage for most languages is primarily due to misspelled or incorrectly extracted article text in Wikipedia articles generating a long tail of low frequency words, and noise in the dictionaries themselves.  On the target side, dictionary noise and rich morphology of some of the languages we consider also substantially reduces coverage.  Moreover, some of the dictionaries contain translations whose script was changed to Latin (see the last column of \tabref{fig:wikidictstats}).  Due to these reasons, evaluation results we present below tend to be conservative.  We propose an alternative method of obtaining small translation lexicons in \secref{sect:mturk}.  Finally, we have also collected stop words for Farsi, Bangla, Hindi, Polish, Spanish, Russian, Romanian, and English.\\
+\noindent{\em Dictionaries and stopword lists.}  Dictionaries provide a crucial resource for projecting vector-base representations of equivalence classes and for evaluating the quality of induced lexicons.  \tabref{fig:wikidictstats} lists the sizes of our dictionaries, along with their coverage of the English side of the ``comparable'' bilingual Wikipedia subsets in column 2.  Type coverage measures the proportion of unique Wikipedia English words which have an entry in the dictionary, while token coverage takes into account their corpus counts. Low type coverage for most languages is primarily due to misspelled or incorrectly extracted article text in Wikipedia articles generating a long tail of low frequency words, and noise in the dictionaries themselves.  On the target side, dictionary noise and rich morphology of some of the languages we consider also substantially reduces coverage.  Moreover, some of the dictionaries contain romanized translations (boldfaced in the last column of \tabref{fig:wikidictstats}) and are not used in the results we present here.  Investigating automatic techniques to induce the original language script from dictionary romanization is a subject of ongoing work.
 
-\noindent{\em News wire}.  We have assembled additional monolingual corpora by continuously crawling a set of regularly updated news websites.  Up to 10 years of collected and processed data are listed in \tabref{fig:newsstats} for 25 languages: the last page counts a number of tokens collected and the previous columns list the number of days with at least one associated story for each of the 10 years.  We used a set of heuristics to extract language and temporal information from page URL and body text; a substantial portion of the crawled data not included in the table still remains to be processed for language and time.
+
+Due to these reasons, evaluation results we present below tend to be conservative.  We propose an alternative method of obtaining small translation lexicons in \secref{sect:mturk}.  Finally, we have also collected stop words for Farsi, Bangla, Hindi, Polish, Spanish, Russian, Romanian, and English.\\
+
+\noindent{\em News wire}.  We have assembled additional monolingual corpora by continuously crawling a set of regularly updated news websites.  Up to 10 years of collected and processed data are listed in \tabref{fig:newsstats} for 25 languages: the last page counts a number of tokens collected and the previous columns list the number of days with at least one associated story for each of the 10 years.  We used a set of heuristics to extract language and temporal information from page URL and body text; a substantial portion of the total of 1.4 billion tokens of crawled data not included in the table still remains to be processed for language and time.\\
 
 \begin{table}[h!]
 \setlength{\tabcolsep}{1ex}
 \footnotesize
 \begin{center}
-\begin{tabular}{lrrrrrrrrrrrr}
-Language		&	\multicolumn{11}{c}{Pages per year}	&	Total\\
+\begin{tabular}{l|rrrrrrrrrrr|r}
+\multicolumn{1}{c}{Language}		&	\multicolumn{11}{c}{Days with data}	&	Total\\
 \cline{2-12}
 	&	'00	&	'01	&	'02		&	'03	&	'04		&	'05		&	'06	&	'07	&	'08	&	'09	&	'10	&	tokens\\
 \hline
@@ -288,26 +296,32 @@ Chinese	&	-	&	-	&	-	&	-	&	-	&	5	&	1	&	6	&	7	&	14	&	32	&	1,864,565\\
 \end{tabular}
 \end{center}
 \normalsize
-\caption{Crawled newswire pages with identified language and publication date information.}
+\caption{A fraction of crawled newswire pages we have gathered for which we inferred both language and publication date information.}
 \label{fig:newsstats}
 \end{table}
 
 \mtodo{Note: Ben's runs used an older crawl from April.}
 
-\noindent{\em Parallel texts.}  EuroParl \cite{Koehn:2005} is a parallel corpus in 11 languages compiled from European parliament proceedings published on the web.  Besides sentence alignment, a portion of the corpus contains temporal annotation.  While we cannot assume such resources to be available for all of our language pairs, we use it to get a sense of an upper bound of the performance we can achieve with our methods.
+\noindent{\em Parallel texts.}  Europarl \cite{Koehn:2005} is a parallel corpus in 11 languages compiled from European parliament proceedings published on the web.  Besides sentence alignment, a portion of the corpus contains temporal annotation.  While we cannot assume such resources to be available for all of our language pairs, we use it to get a sense of an upper bound of the performance we can achieve with our methods.
 
 %-----------------------------------------------------
 \section{Experimental Evaluation} \label{sect:experiments}
 
 We evaluate performance of the lexicon induction framework on the monolingual resources we have collected and described in \secref{sect:resources}.  In the first set of experiments, we consider a high resource language pair to establish relative efficacy of the cues and to get a sense of an upper bound on the overall performance. We then induce translations between English and ten low resource languages.  Since many of the seed and test dictionaries are sparse and noisy, we investigate the feasibility of crowd-sourcing annotations and their use in an iterative induction procedure. \\ %Finally, we investigate heuristics we discussed in \secref{sect:morph} for handling morphology.\\
 
-For each language, we construct a test dictionary by randomly selecting $10\%$ of the entries in the corresponding bilingual dictionary (see \secref{sect:resources}), and leave the remainder as a seed lexicon for the contextual cue.  We select 1000 source words from the test dictionary and compute the accuracy of the induced translations.  The performance is measured by top-$k$ accuracy, i.e. the proportion of the source words which have at least one test dictionary translation among top $k$ of its induced candidates.  Note that the reported performance is conservative since the test dictionaries are both noisy and sparse. Unless mentioned otherwise, we use the simple equivalence class heuristic (i.e. each unique token is assigned its own equivalence class) when constructing both contextual vectors and candidates.  We do not consider stop words as both source and target candidates; for languages without a stop word list, we remove 200 most frequent equivalence classes.\\
+For each language, we construct a test dictionary by randomly selecting $10\%$ of the entries in the corresponding bilingual dictionary (see \secref{sect:resources}), and leave the remainder as a seed lexicon for the contextual cue.  We select 1000 source words from the test dictionary and compute the accuracy of the induced translations.  The performance is measured by top-$k$ accuracy, i.e. the proportion of the source words which have at least one test dictionary translation among top $k$ of its induced candidates.  More formally, denote $D$ a set of tuples $\{(s_{i}, t_{i})\}_{i=1}^{1000}$ of source words and their corresponding ranked lists of translations, a function $r(t, j)$ which returns a set of translation candidates at position $j$ or above in ranking $t$, and a function $d(s, w)$ which returns true iff any translation candidates in a set $w$  for $s$ is present in the test dictionary.  The accuracy at top-k is then computed as follows\footnote{$\llbracket \cdot \rrbracket$ is one if the predicate inside the brackets is true, and zero otherwise.}:
+
+\begin{equation}
+  g(U, k) = {1 \over |U|}\sum_{(s,t) \in U} \llbracket d(s, r(t, k))\rrbracket
+\end{equation}
+
+Note that the reported performance is conservative since (1) as we discussed, our test dictionaries are both noisy and sparse, and (2) $g(U, k)$ does not account for multiple correct translations among top $k$ candidates. Unless mentioned otherwise, we use the simple equivalence class heuristic (i.e. each unique token is assigned its own equivalence class) when constructing both contextual vectors and candidates.  We do not consider stop words when constructing a list of source words and potential target translations.  For languages without a stop word list, we drop 200 equivalence classes which occur most frequently in our corpus.  However, we do not perform this pruning step when collecting contextual vectors. \\
 
 As we have pointed out, one of the objectives of this work is to induce lexicons with wide coverage.  Thus, unlike most of the previous work, we are particularly interested in how well we can do on inducing translations for source equivalence classes selected \emph{randomly} from the test dictionary.
 
 \subsection{Lexicon induction for a high-resource language pair} \label{sect:exphigh}
 
-We begin by evaluating the relative performance of lexicons induced from contextual, temporal, and orthographic cues as well as the MRR rank aggregation scheme on the English-Spanish EuroParl parallel data for inducing translations for most frequent and random 1000 words source present in our test dictionary (top left and right of \figref{fig:exp1}, respectively). The corpus is time stamped (spanning 656 days) and perfectly \emph{temporally} aligned, so it is not surprising that the temporal cue provides a strong signal for inducing translations.  All of these cues are informative and orthogonal, so combining them substantially improves results with $73\%$ and  $82\%$ accuracy at top 100 and 500 for most frequent source words, and $70\%$ and  $79\%$, respectively, for random source tokens.  \\
+We begin by studying some of the monolingual cues we have introduced in \secref{sect:cues} as well as the MRR rank aggregation scheme on a high resource language pair.  Besides providing a sense of an upper bound of performance of the individual cues, this setting is convenient for testing aggregation strategies, similarity metrics, etc.  \figref{fig:exp1} plots the relative performance of contextual, temporal, and orthographic cues on the English-Spanish part of the Europarl parallel data for most frequent and random 1000 words source present in our test dictionary (top left and right, respectively).  The corpus is time stamped (spanning 656 days) and perfectly \emph{temporally} aligned, so it is not surprising that the temporal cue provides a strong signal for inducing translations.  All of these cues are informative and orthogonal, so combining them substantially improves results with $73\%$ and  $82\%$ accuracy at top 100 and 500 for most frequent source words, and $70\%$ and  $79\%$, respectively, for random source tokens.  \\
 
 \begin{figure}[h!]
 \centerline{\mbox{\includegraphics[width=2.4in]{figures/exp1/parallel.freq/parfreq} \includegraphics[width=2.4in]{figures/exp1/parallel.rand/parrand}}}
@@ -316,15 +330,65 @@ We begin by evaluating the relative performance of lexicons induced from context
 \label{fig:exp1}
 \end{figure}
 
-We repeat the same experiment using wikipedia and newswire data to derive dictionaries from contextual and temporal cues, respectively (\figref{fig:exp1}, bottom).  Since the newswire corpora is only weakly temporally aligned, the performance of the temporal cue drops substantially.  Still, the cues provide informative and non-redundant signals, which can be combined to obtain better quality lexicons.  Notice the substantial drop in performance (about {\bf 19\%}) for randomly selected source tokens.  While not entirely surprising, it supports our observation that evaluating on frequent source words alone can be misleading if the objective is to induce wide coverage dictionaries.
+We repeat the same experiment using wikipedia and newswire data to derive dictionaries from contextual and temporal cues, respectively (\figref{fig:exp1}, bottom).  Since the newswire corpora is only weakly temporally aligned, the performance of the temporal cue drops substantially.  Still, the cues provide informative and non-redundant signals, which can be combined to obtain better quality lexicons.  Notice the substantial drop in performance (about {\bf 19\%}) for randomly selected source tokens.  While not entirely surprising, it supports our observation that evaluating on frequent source words alone can be misleading if the objective is to induce wide coverage dictionaries.\\
+
+\begin{table}[h!]
+\setlength{\tabcolsep}{1ex}
+\footnotesize
+\begin{center}
+\begin{tabular}{lllll}
+\multicolumn{3}{c}{cues}\\
+\cline{1-3}
+contextual		&	temporal	&	orthographic	&	MRR	\\
+\hline
+sadam	&	{\bf autoritario}	&	{\em autoritaria}, {\em autoritarias} &	{\bf autoritario}	\\
+{\bf autoritario}	&	democracia	&	{\bf autoritario}, {\em autoritarios} &	sadam\\
+az\'{u}car	&	{\em autoritarios}	&	autoritarismo, \dots &	{\em autoritaria}\\
+perfeccionamiento	&	país	&	 autorizadas, \dots &	{\em autoritarias}\\
+tr\'{a}nsito	&	democr\'{a}ticas	&	horarias, \dots &	{\em autoritarios}\\
+apartheid	&	elecciones	&	autocar comisaria \dots &	democracia\\
+transitorio	&	fuerzas	&	&	az\'{u}car\\
+totalitario	&	vecino	&	&	perfeccionamiento, país\\
+talib\'{a}n	&	democr\'{a}ticos	&	&	democr\'{a}ticas, tr\'{a}nsito\\
+dictatorial	&	{\em autoritaria}	&	&	elecciones, apartheid\\
+\hline
+{\bf infantil}	&	{\em lactantes}	&	{\bf infantil}, infame, \dots &	{\bf infantil}\\
+materna	&	mortalidad	&	infames, infamia, \dots &	{\em lactantes}\\
+maternal	&	sociedad	&	isaf, influir, \dots &	materna, mortalidad, \dots\\
+morbilidad	&	nivel	&	&	maternal, sociedad\\
+índice	&	problema	&	&	morbilidad, nivel\\
+tasa	&	trabajo	&	&	índice, problema\\
+disminuiría	&	países	&	&	tasa, trabajo\\
+cr\'{o}nico	&	tiempo	&	&	países, disminuiría\\
+escape	&	reducci\'{o}n	&	&	 cr\'{o}nico, tiempo\\
+derivada	&	desarrollo	&	&	reducci\'{o}n, escape\\
+\hline
+{\bf almacenamiento}	&	{\bf almacenamiento}	&	jorge, seora, \dots	&	{\bf almacenamiento}\\
+{\bf almacenaje}	&	nuclear	&	saturado, gestoras, \dots	&	{\bf almacenaje}, nuclear\\
+recoger	&	radiactivos	&	&	recoger, radiactivos\\
+m\'{e}dico	&	almacenar	&	&	almacenar, m\'{e}dico\\
+tratamiento	&	radioactivos	&	&	tratamiento, radioactivos\\
+servicio	&	propuesta	&	&	propuesta, servicio\\
+viaje	&	normas	&	&	viaje, normas\\
+vuelo	&	peligro	&	&	vuelo, peligro\\
+registro	&	llegar	&	&	llegar, registro\\
+etc	&	instalaciones	&	&	instalaciones, etc\\
+\end{tabular}
+\end{center}
+\normalsize
+\caption{Top ranked translations for {\bf authoritarian}, {\bf infant}, {\bf storage} (top, middle, bottom, respectively) inferred from context, temporal, and orthographic cues and aggregated with the MRR heuristic.  Correct translations are in bold if found in the test dictionary and italicized otherwise.}
+\label{fig:examplelists}
+\end{table}
+
+\tabref{fig:examplelists} contains ranked lists of translations induced from the three cues and aggregated using the MRR heuristic for three sample english words: authoritarian, infant, and storage.  Note the numerous morphological variants of the correct translations and alternative translations not found in the dictionary (italicized).  Also notice that when some signals are not informative (e.g. the orthographic cue in the third example) others may still be sufficient to induce the correct candidates at the top of the aggregated list.
 
 \subsection{Context vs.\ alignments} 
 
-Word alignments can be induced directly from sentence aligned corpora.  In this set of experiments, we compare bilingual lexicons derived from word alignments (produced by GIZA++) to those generated from the contextual cue alone on the English-Spanish section of the EuroParl corpus (see \figref{fig:exp2}). While word alignments induce a much more informative signal than context alone, sufficient sentence aligned bilingual data is not available for most of the low resource languages we consider in this work.\\
+Word alignments can be induced directly from sentence aligned corpora.  In this set of experiments, we compare bilingual lexicons derived from word alignments (produced by GIZA++, \cite{Och:2003}) to those generated from the contextual cue alone on the English-Spanish section of the Europarl corpus (see \figref{fig:exp2}). While word alignments induce a much more informative signal than context alone, sufficient sentence aligned bilingual data is not available for most of the low resource languages we consider in this work.\\
 
 \begin{figure}[h!]
 \centerline{\mbox{\includegraphics[width=3in]{figures/exp2/alignvscontext}}}
-\caption{Accuracy of lexicons induced from alignments and context on parallel en-es data for random and most frequent 1000 source words.}
+\caption{Accuracy of lexicons induced from alignments and context on parallel en-es data for random 1000 source words.}
 \label{fig:exp2}
 \end{figure}
 
@@ -332,7 +396,7 @@ Word alignments can be induced directly from sentence aligned corpora.  In this 
 
 Next, we selected 10 low resource languages for which we have collected sufficient amount of newswire data and have seed dictionaries in an appropriate script: Welsh, Farsi, Indonesian, Latvian, Russian, Slovak, Albanian, Serbian, Turkish, and Uzbek.  \figref{fig:exp3} shows the accuracy of lexicons induced from the contextual (top), and temporal (middle) cues, and the MRR aggregation scheme (bottom); results for 1000 most frequent and random source words are shown on the left and right, respectively.\\
 
-Lexicon accuracy drops substantially for Russian and Turkish on random source words, as expected.  For the remaining languages, low dictionary coverage means a large overlap between 1000 random and most frequent test dictionary terms.  That is, both sets of experiments effectively test the accuracy on random source words, since test dictionary entries themselves were selected at random. \mtodo{Confusing? Drop most frequent?}  Both temporal and contextual cues are informative, but the simple aggregation heuristic fails to provide an improvement.  While simple ensemble schemes typically work well for a large number of diverse signals, a more sophisticated approach to combining few available ranked lists remains the subject of our ongoing work.\\
+Similarly to the experiments in \secref{sect:exphigh}, lexicon accuracy drops on random source words for Russian and Turkish.  For the remaining languages, low dictionary coverage means a large overlap between 1000 random and most frequent test dictionary terms.  That is, both sets of experiments effectively test the accuracy on random source words, since test dictionary entries themselves were selected at random. \mtodo{Confusing? Drop most frequent?}  Both temporal and contextual cues are informative, but the simple aggregation heuristic fails to provide an improvement.  While simple ensemble schemes typically work well for a large number of diverse signals, a more sophisticated approach to combining few available ranked lists remains the subject of our ongoing work.\\
 
 \begin{figure}[h!]
 \centerline{\mbox{\includegraphics[width=2.4in]{figures/exp3/freq/freqcontext} \includegraphics[width=2.4in]{figures/exp3/rand/randcontext}}}
@@ -415,9 +479,9 @@ In order to extend the framework to add a new monolingual resource and/or includ
   \item Extend \small{\tt Scorer} to implement a similarity metric for scoring a source and a target candidate equivalence classes.
 \end{itemize}
 
-\newpage
+%\newpage
 \lstinputlisting[caption=Example configuration file.,label=fig:cfg]{figures/babel.xml}
-\newpage
+%\newpage
 
 %-----------------------------------------------------
 \section{Conclusions and Future Work}

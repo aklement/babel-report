@@ -9,7 +9,7 @@ t1size <- 1.3
 xrange <- range(0, 600)
 yrange <- range(0, 40)
 
-png(filename="freqcontext.png", height=500, width=600, bg="white")
+pdf(file="freqcontext.pdf", height=6, width=7, onefile=TRUE, family='Helvetica', pointsize=12)
 
 par(mar=c(4.5,4.5,3.5,0.5), new=FALSE, cex.lab=tsize)
 
@@ -20,15 +20,18 @@ for (i in (1:(length(langs)))) {
     plot(xlim = xrange, ylim = yrange, v$K, v$Accuracy.TopK, type="o", pch=pts[i], lty=types[i], lwd=2, col=colors[i], ann=FALSE, cex.axis=t1size)
   }
   else {
-    lines(v$K, v$Accuracy.TopK, type="o", pch=pts[i], lty=types[i], lwd=2, col=colors[i])
+    lines(v$K, v$Accuracy.TopK, type="o", pch=pts[i], lty=types[i], lwd=3, col=colors[i])
   }
 }
 
 grid(col = "black", lty = "dotted", lwd = 1, equilogs = TRUE)
 
 #title(xlab="k in top-k")
-title(ylab="Accuracy")
+title(ylab="Accuracy (Contextual cue)")
 
-legend("bottomright", langs, cex=t1size, col=colors, lty=types, pch=pts, lwd=2, bty="n");
+legend("bottomright", langs, cex=t1size, col=colors, lty=types, pch=pts, lwd=3, bty="y", bg="white");
+
+mtext("Most Frequent", NORTH<-3, line=1.7, cex=tsize)
+#mtext("Contextual", WEST<-2, line=3.5, cex=tsize)
 
 dev.off()

@@ -7,9 +7,9 @@ tsize <- 1.6
 t1size <- 1.3
 
 xrange <- range(0, 600)
-yrange <- range(0, 20)
+yrange <- range(0, 40)
 
-png(filename="freqtime.png", height=500, width=600, bg="white")
+pdf(file="freqtime.pdf", height=6, width=7, onefile=TRUE, family='Helvetica', pointsize=12)
 
 par(mar=c(4.5,4.5,3.5,0.5), new=FALSE, cex.lab=tsize)
 
@@ -17,18 +17,18 @@ for (i in (1:(length(langs)))) {
   v <- read.table(file=paste(langs[i],"/time.eval", sep=""), sep = "\t", head=TRUE)
 
   if (i == 1) {
-    plot(xlim = xrange, ylim = yrange, v$K, v$Accuracy.TopK, type="o", pch=pts[i], lty=types[i], lwd=2, col=colors[i], ann=FALSE, cex.axis=t1size)
+    plot(xlim = xrange, ylim = yrange, v$K, v$Accuracy.TopK, type="o", pch=pts[i], lty=types[i], lwd=3, col=colors[i], ann=FALSE, cex.axis=t1size)
   }
   else {
-    lines(v$K, v$Accuracy.TopK, type="o", pch=pts[i], lty=types[i], lwd=2, col=colors[i])
+    lines(v$K, v$Accuracy.TopK, type="o", pch=pts[i], lty=types[i], lwd=3, col=colors[i])
   }
 }
 
 grid(col = "black", lty = "dotted", lwd = 1, equilogs = TRUE)
 
 #title(xlab="k in top-k")
-title(ylab="Accuracy")
+title(ylab="Accuracy (Temporal cue)")
 
-legend("bottomright", langs, cex=t1size, col=colors, lty=types, pch=pts, lwd=2, bty="n");
+legend("bottomright", langs, cex=t1size, col=colors, lty=types, pch=pts, lwd=3, bty="y", bg="white");
 
 dev.off()
