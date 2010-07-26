@@ -13,13 +13,6 @@
     <DateFrom>00-01-01</DateFrom>
     <DateTo>10-04-20</DateTo>
   </crawls>
-  <europarl>
-    <Path> ./resources/es-en</Path>
-    <SrcSubDir>en/</SrcSubDir>
-    <TrgSubDir>es/</TrgSubDir>
-    <DateFrom>96-04-15</DateFrom>
-    <DateTo>06-10-13</DateTo>
-  </europarl>
 </corpora>
 <resources>
   <stopwords>
@@ -76,6 +69,7 @@
   <DoTime>true</DoTime>
   <DoContext>true</DoContext>
   <DoEditDistance>false</DoEditDistance>
-  <DoAggregate>true</DoAggregate></experiments>
+  <DoAggregate>true</DoAggregate>
+</experiments>
 </configuration>
 

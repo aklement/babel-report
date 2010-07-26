@@ -57,7 +57,7 @@ keywords={corpora, resources, preprocessing, output, experiments}            % i
 % any "\include{...}" statements go here
 %
 
-\title{Lexicon Induction for Low-resource Languages}
+\title{Bilingual Lexicon Induction for Low-resource Languages}
 
 %the first "thanks" for each author should list the affiliation with DIMACS
 
@@ -111,22 +111,24 @@ The second goal of the BABEL project is to propose novel translation models to u
 
 %The literature on translation lexicon induction for low-resource languages falls in to two broad categories: 1) utilizing similarity between languages by choosing a high-resource “bridge” language for translation (\cite{Mann:2001}, \cite{Schafer:2002}) and 2) extracting noisy cues from monolingual corpora and using them to associate words across languages.\\
 
-\cite{Rapp:1999} was the first to propose using context of a given word as a clue to its translation. Given a German word with an unknown translation, its surrounding words were collected and translated into English using a small seed dictionary.  Words with similar context in a monolingual English corpus were then proposed as translation candidates.  The original work employed a relatively large bilingual dictionary containing approximately 16,000 words and tested only on a small collection of 100 manually selected nouns.  Subsequent work has explored Rapp's ideas proposing a variety of alternative similarity metrics, better methods for collecting context, and monolingual cues.  \cite{Koehn:2002} used a larger test set consisting of the 1000 most frequent words from a German-English lexicon. They also incorporated cues such as frequency and orthographic similarity in addition to context. \cite{Schafer:2002} independently proposed using frequency, orthographic similarity and also showed improvements using temporal and word burstiness similarity measures, in addition to context.  \cite{Klementiev:2006b} used phonetic and temporal similarity specifically to discover transliterated terms.  \cite{Haghighi:2008} made use of contextual and orthographic cues for learning a generative model from monolingual corpora and a seed lexicon.  \cite{Garera:2009} proposed a dependency-based context model that incorporates long-range dependencies, variable context sizes, and reordering.  \cite{Mimno:2009}, \cite{Boyd-Graber:2009} exploited to use multilingual topic models to discover translations.\\
+\cite{Rapp:1995} was the first to propose using context of a given word as a clue to its translation. Given a German word with an unknown translation, its surrounding words were collected and translated into English using a small seed dictionary.  Words with similar context in a monolingual English corpus were then proposed as translation candidates.  The original work employed a bilingual dictionary containing approximately 16,000 words.  Contextual vectors were collected from corpora of 135 and 163 million words on the German and English sides, respectively.  While our goal is collect and exploit large monolingual corpora, we do not yet have access to large datasets for all of low resource languages we consider (see \secref{sect:resources}).  Moreover, \cite{Rapp:1995} lemmatized both monolingual corpora, a step we cannot generally assume in our low-resource setting (we discuss alternatives in \secref{sect:morph}).  Exact test dictionary matching on a small collection of 100 manually selected nouns was used to evaluate the induction procedure.  We show  (\secref{sect:exphigh}) that evaluation results on a small set of hand selected words reported in this in most of the previous work can be misleading if the objective is to induce large translation dictionaries.  Instead, we focus on measuring the quality of induced lexicons on {\em randomly} selected words.\\
 
-We first show that evaluation results on a small set of hand selected words typically reported in previous work can be misleading if the objective is to induce large translation dictionaries.  We then investigate the effectiveness of individual monolingual cues for inducing broad coverage lexicons for a large number of low-density languages. \\
+Subsequent work has explored Rapp's ideas proposing a variety of alternative similarity metrics, better methods for collecting context, and novel monolingual cues.  It can be roughly grouped as follows:
 
-%\begin{itemize}
-%\setlength{\parskip}{0pt}
-%  \item Context: \cite{Rapp:1995,Rapp:1999,Fung:1998}
-%  \item Time: \cite{Schafer:2002,Klementiev:2006b}
-%  \item Topics: \cite{Mimno:2009,Boyd-Graber:2009}
-%  \item Multiple: \cite{Schafer:2002,Koehn:2000,Haghighi:2008}
-%  \item Dependecies: \cite{Garera:2009}
-%  \item --- Bridge languages: \cite{Mann:2001}
-%  \item Combination Strategies: \cite{Koehn:2002,Klementiev:2006b,Klementiev:2008a}
-%  \item Mechanical Turk: Following previous work on posting NLP tasks on MTurk \cite{Snow:2008,CCB:2009}, we use the service to gather annotations for proposed bilingual lexicon entries. 
-%  \item Other: \cite{Monz:2005}
-%\end{itemize}
+\begin{itemize}
+\setlength{\parskip}{0pt}
+  \item \cite{Rapp:1999,Fung:1998} directly extend the original idea proposing alternative similarity metrics.  We will follow this line of work when defining the contextual cue in \secref{sect:cues}.
+  \item \cite{Garera:2009} show further improvements when contexts are derived from dependency trees rather than using adjacency.  We plan to include dependency context information whenever available into our current implementation.  
+  \item \cite{Schafer:2002} exploited the idea that word translations tend to co-occur in time across languages. \cite{Klementiev:2006b} exploited the temporal cue to train a phonetic similarity model for associating Named Entities across languages and used a Discrete Fourier Transform similarity metric novel in this domain.  We also use this cue for associating words in time stamped newswire data in \secref{sect:cues}.
+  \item \cite{Mimno:2009} propose a polylingual topic model and match high probability words in each topic across languages.  While effective for a small number of topics (448 in their experiments), it is unlikely to scale well for inducing large multilingual dictionaries.  We propose an alternative to exploit explicit category information already present in many monolingual resources (such as news stories and Wikipedia articles) in \secref{sect:cues}. \mtodo{Keep topic?}
+  \item A few authors have exploited strategies for combining multiple cues typically employing simple heuristics (e.g. \cite{Schafer:2002} and \cite{Koehn:2002}).  We use a simple information retrieval scheme for combining ranked lists of translation candidates, and work to exploit more sophisticated methods (e.g. \cite{Klementiev:2006b} and \cite{Klementiev:2008a}) is ongoing.
+  \item Not directly related to lexicon induction is the work on exploiting crowd sourced annotations in various NLP tasks (e.g. \cite{Snow:2008}, and \cite{CCB:2009}).  We  propose an effective technique for using crowd sourced annotations to incrementally refine the output of our lexicon induction system
+\end{itemize}  \mtodo{A few words about the scalability of Haghighli's model.}
+
+%  \cite{Koehn:2002} used a larger test set consisting of the 1000 most frequent words from a German-English lexicon. They also incorporated cues such as frequency and orthographic similarity in addition to context. \cite{Schafer:2002} independently proposed using frequency, orthographic similarity and also showed improvements using temporal and word burstiness similarity measures, in addition to context.  \cite{Klementiev:2006b} used phonetic and temporal similarity specifically to discover transliterated terms.  \cite{Haghighi:2008} made use of contextual and orthographic cues for learning a generative model from monolingual corpora and a seed lexicon.  \cite{Garera:2009} proposed a dependency-based context model that incorporates long-range dependencies, variable context sizes, and reordering.  \cite{Mimno:2009}, \cite{Boyd-Graber:2009} exploited to use multilingual topic models to discover translations.\\
+
+
+%We first show (see \secref{sect:exphigh}) that evaluation results on a small set of hand selected words typically reported in previous work can be misleading if the objective is to induce large translation dictionaries.  We then investigate the effectiveness of individual monolingual cues for inducing broad coverage lexicons for a large number of low-density languages. \\
 
 %-----------------------------------------------------
 \section{Inducing Bilingual Lexicons From Monolingual Cues}\label{sect:cues}
@@ -135,7 +137,15 @@ Various linguistic and corpus cues can be informative for relating word translat
 
 \subsection{Monolingual cues}
 
-\noindent\emph{Contextual cue.} \cite{Rapp:1999} proposed inducing a translation dictionary from disparate monolingual texts.  They populate a bilingual lexicon by projecting {\it context vectors} across two languages using vector-space semantic models to represent words  \cite{Deerwester:1990}.  The elements in vector-based representations of a word indicate the frequency of its co-occurrence with all other words in the same language.  For instance, the vector representation of ``airplane'' would indicate that it frequently occurs in contexts near the words ``airport'', ``flight'', ``landing,'' ``passengers'', ``pilot'', ``runway'',  etc.  The similarities of words within one language can be measured using the distance between their vectors, with cosine similarity, for instance.  To translate unknown words, \cite{Rapp:1999} suggests building vector space models of two languages.  The elements in an unknown word's vector are {\it projected} into the vector space of the other language using the known translations from a small seed bilingual dictionary.  This sparse projected vector is compared to the vectors for all words in the target language.  The word whose vector is most similar to the projected vector is considered to be the best translation of the unknown word.  This process is illustrated in Figure \ref{fig:contextual}.\\
+\noindent\emph{Contextual cue.} \cite{Rapp:1999} proposed inducing a translation dictionary from disparate monolingual texts.  They populate a bilingual lexicon by projecting {\it context vectors} across two languages using vector-space semantic models to represent words  \cite{Deerwester:1990}.  The elements in vector-based representations of a word indicate the frequency of its co-occurrence with all other words in the same language.  For instance, the vector representation of ``airplane'' would indicate that it frequently occurs in contexts near the words ``airport'', ``flight'', ``landing,'' ``passengers'', ``pilot'', ``runway'',  etc.  The similarities of words within one language can be measured using the distance between their vectors, with cosine similarity, for instance.  To translate unknown words, \cite{Rapp:1999} suggests building vector space models of two languages.  \\
+
+More formally, assume that $(s_{1}, s_{2}, \dots s_{N})$ and $(t_{1}, t_{2}, \dots t_{M})$ are (arbitrarily indexed) source and target vocabularies, respectively.  Each source word $s_{i}$ (target word $t_{j}$) is represented with an $N$ ($M$) dimensional vector.  Only the components corresponding to words that appear in the context of $s_{i}$ ($t_{j}$) in data take on non-zero values, which typically measure how ``unique'' a word is to the context in the dataset.  Next, the source vectors are projected by mapping each source component to a component in the target space corresponding to its dictionary translation, but retaining the source component value.  This sparse projected vector is compared to the vectors for all words in the target language, and a similarity score is used to select the best candidate or induce a ranking.  Various means of computing the component values and vector similarity measures have been proposed in literature (e.g. \cite{Rapp:1999,Fung:1998}).  While the quality of the resulting induced lexicon depends on the data, we found the following to work best in our experiments.  We compute the value of the $k$-th component of $s_{i}$'s contextual vector  as follows: 
+
+\begin{equation}
+w_{k}^{(i)} = n_{i,k} \times (log( {n / n_{i}}) + 1)
+\end{equation}
+
+where $n_{i,k}$ and $s_{k}$ are the number of times $s_{k}$ appears in the context of $s_{i}$ and in the entire corpus, and $n$ is the maximum number of occurrences of any word in the data.  Intuitively, the more frequently $s_{k}$ appears with $s_{i}$ and the less common it is in the corpus in general, the higher its component value.  The similarity between two resulting vectors is measured as a cosine of the angle between them.  The entire process is illustrated on Figure \ref{fig:contextual}.\\
 
 \begin{figure}
 \centerline{\mbox{\includegraphics[width=2.8in]{figures/contextual}}}
@@ -143,7 +153,7 @@ Various linguistic and corpus cues can be informative for relating word translat
 \label{fig:contextual}
 \end{figure}
 
-\noindent\emph{Temporal cue.} Online content is often published along with temporal information: news feeds, for example, are comprised of news stories annotated with date and time of publication.  The feeds are specialized for the target geographical locations and vary in content across languages.  Still, many events are deemed relevant to multiple audiences and the news stories related to them appear in several languages, although rarely as direct translations of one another.  Words associated with these events will appear with increased frequency in multiple languages around the dates when these events are reported.  \figref{fig:temporal} illustrates this idea with temporal histograms of three English words and their Spanish translations. Such weak synchronicity provides a cue about the relatedness of words across the two languages, and can be exploited to associate them.  In order to score a pair of entities across languages, we can compute the similarity of their temporal signatures.\mtodo{\figref{fig:temporal} is from Europarl, add the one from the proposal instead.}\\
+\noindent\emph{Temporal cue.} Online content is often published along with temporal information: news feeds, for example, are comprised of news stories annotated with date and time of publication.  The feeds are specialized for the target geographical locations and vary in content across languages.  Still, many events are deemed relevant to multiple audiences and the news stories related to them appear in several languages, although rarely as direct translations of one another.  Words associated with these events will appear with increased frequency in multiple languages around the dates when these events are reported.  \figref{fig:temporal} illustrates this idea with temporal histograms of three English words and their Spanish translations. Such weak synchronicity provides a cue about the relatedness of words across the two languages, and can be exploited to associate them.  In order to score a pair of entities across languages, we can compute the similarity of their temporal signatures.\mtodo{\figref{fig:temporal} is from Europarl, add the one from the proposal instead.}  To generate a time sequence for a given word, we first sort the set of (time-stamped) documents of our corpus into a sequence of equally sized temporal bins.  We then count the number of occurrences of the word in each bin.  Changing the size of the bin or computing counts in a sliding window instead can recover some accuracy if the temporal alignment between two languages in our dataset is poor \cite{Klementiev:2006b}.  Finally, we normalize the sequence and use either the cosine measure or F-index \cite{Hetland:2004} to score similarity. To compute the latter, we first run a Discrete Fourier Transform on a time sequence to extract its Fourier expansion coefficients. The score of a pair of time sequences is then computed as a Euclidean distance between their expansion coefficient vectors. \\
 
 \begin{figure}[h]
 \centerline{\mbox{\includegraphics[width=2.8in]{figures/temporal}}}
@@ -157,7 +167,7 @@ Various linguistic and corpus cues can be informative for relating word translat
 
 %\noindent\emph{Topic cue.}  Yet another idea is to exploit the category metadata often associated with a piece of text (such as news story or a Wikipedia article), i.e. associate words according to categories they tend to appear in.  
 
-\subsection{Combination Strategies}
+\subsection{Combination strategies}
 
 These cues provide informative and independent means to score a source word and a target candidate, and combining them is likely to produce better lexicons.  One idea is to directly combine the ranked lists of induced candidates using the mean reciprocal rank (MRR) heuristic frequently used in Information Retrieval literature.  The idea is to score each of the translation candidates with an average reciprocal rank across all rankings, and then sort the candidates in descending order.\\
 
@@ -171,9 +181,9 @@ Some of the metrics we have introduced (e.g. edit distance) are likely to assign
 \label{fig:rankties}
 \end{figure}
 
-\subsection{Handling Morphology} \label{sect:morph}
+\subsection{Handling morphology} \label{sect:morph}
 
-Many of the languages in our list such as Russian and Korean are characterized by morphological rules generating a large number of word forms for the same lexeme.  Thus, we need to be able to group morphological variants of the same word into an equivalence class and collect their aggregate statistics.  For instance, we would like to count the total number of occurrences of \emph{\{Herzegovina, Hercegovina\}} on the English side in order to map it accurately to the corresponding equivalence class we may see on the Russian side of our corpus (e.g. \cyri{\{Gercegovina, Gercegovinu, Gercegoviny, Gercegovino\U{i}\}}).  In order to keep to our objective of requiring as little language knowledge as possible, we take a rather simplistic approach for grouping equivalence classes.  For morphologically rich languages, a set of words are in the same equivalence class if they share a prefix of size five or longer.  For the other languages, each unique word is assigned its own class.  More sophisticated unsupervised approaches (i.e. \cite{Goldwater:2006}) could be incorporated instead, and are a subject of ongoing work.
+Many of the languages in our list such as Russian and Korean are characterized by morphological rules generating a large number of word forms for the same lexeme.  Thus, we need to be able to group morphological variants of the same word into an equivalence class and collect their aggregate statistics.  For instance, we would like to count the total number of occurrences of \emph{\{Herzegovina, Hercegovina\}} on the English side in order to map it accurately to the corresponding equivalence class we may see on the Russian side of our corpus (e.g. \cyri{\{Gercegovina, Gercegovinu, Gercegoviny, Gercegovino\U{i}\}}).  In order to keep to our objective of requiring as little language knowledge as possible, we take a rather simplistic approach for grouping equivalence classes.  For morphologically rich languages, a set of words are in the same equivalence class if they share a prefix of size five or longer.  For the other languages, each unique word is assigned its own class.  More sophisticated unsupervised approaches (i.e. \cite{Snyder:2008, Poon:2009a}) could be incorporated instead, and are a subject of ongoing work.
 
 %-----------------------------------------------------
 \section{Resources} \label{sect:resources}
@@ -188,70 +198,67 @@ interlingual links can be used to select articles discussing the same subject ac
 \setlength{\tabcolsep}{1ex}
 \footnotesize
 \begin{center}
-\begin{tabular}{l|rrr|rrr|}
-\multicolumn{1}{c}{}	&	\multicolumn{3}{c}{Wikipedia}	&	\multicolumn{3}{c}{Dictionary}\\
+\begin{tabular}{l|rrr|rrrr|}
+\multicolumn{1}{c}{}	&	\multicolumn{3}{c}{Wikipedia}	&	\multicolumn{4}{c}{Dictionary}\\
 %\hline
-\cline{2-7}% \cline{4-6}
-Language	& page pairs	&	trg tokens	&	script	&	entries	&	src type/token	&	script \\
-	&	& (thousands)	&	&	&	coverage (\%) &\\
+\cline{2-8}% \cline{4-6}
+Language	& page	&	trg tokens	&	script	&	all	&	single	& 	src type/tok	&	script \\
+	&	pairs		& ($\times$ 1000)	&	&	entries	&	words	&	cover. (\%) &\\
 \hline
-Tigrinya	&	36	&	3	&	o	&	56	&	0.3/0.6	&	{\bf r}\\
-Punjabi 	&	401	&	101	&	o	&	76,311	&	12.2/57.7	&	o/{\bf r}\\ 	
-Kyrgyz	&	492	&	77	&	c	&	74,890	&	2.6/42.4	&	{\bf r}\\
-Somali 	&	585	&	82	&	r	&	230	&	0.2/6.8	&	r\\ 
-Nepali 	&	1,293	&	262	&	d	&	6,812	&	3.6/39.7	&	{\bf r}\\
-Tibetan	&	1,358	&	35	&	i	&	59,083	&	2.5/35.1	&	{\bf r}\\
-Uighur	&	1,814	&	114	&	a/r	&	16,285	&	1.7/37.9	&	r\\
-Maltese 	&	1,896	&	706	&	r	&	7,574	&	2.9/44.7	&	r\\
-Turkmen	&	3,137	&	104	&	r	&	91,928	&	4.6/54	&	r\\
-Kazakh 	&	3,470	&	606	&	c	&	145,750	&	1/34	&	{\bf r}\\
-Mongolian 	&	4,009	&	847	&	c	&	948	&	0.3/20.7	&	{\bf r}\\
-Tatar		&	4,180	&	313	&	c/r	&	 8,557	&	1.7/33	&	c/r\\
-Kurdish	&	5,059	&	872	&	r	&	9,870	&	1.2/32	&	r\\
-Uzbek 	&	5,875	&	747	&	r/c	&	190,688	&	6.2/66.4	&	r\\
-Kapampangan	&	6,827	&	875	&	r	&	1,000	&	0.2/7	&	r\\
-Urdu 	&	7,674	&	2,163	&	u	&	36,428	&	2.9/57.1	&	{\bf r}\\
-Irish	&	9,859	&	2,183	&	r	&	887&	0.2/23.5	&	r\\
-Azeri	&	12,568	&	2,518	&	r	&	231,891&	0.6/42.7	&	r\\
-Tamil	&	13,470	&	3,484	&	m	&	165,004	&	2.6/43.6	&	m\\
-Albanian 	&	13,714	&	3,197	&	r	&	188,563	&	5.4/55.6	&	r\\
-Afrikaans	&	14,315	&	4,637	&	r	&	11,389	&	0.8/50.2	&	r\\
-Hindi 	&	14,824	&	5,349	&	d	&	58,179	&	2.2/37.7	&	{\bf r}\\
-Bangla 	&	16,026	&	2,607	&	b	&	1,606	&	0.2/20.6	&	b/{\bf r}\\
-Tagalog	&	17,757	&	2,534	&	r	&	247,662	&	3.5/65.8	&	r\\
-Latvian	&	22,737	&	5,064	&	r	&	148,363	&	3.9/65.5	&	r\\
-Bosnian 	&	23,144	&	5,457	&	r	&	18,283	&	1/44.5	&	r\\
-Welsh	&	25,292	&	3,592	&	r	&	25,832	&	2/50.1	&	r\\
-Latin 	&	31,195	&	3,380	&	r	&	18,884	&	0.9/36.3	&	r\\
-Basque 	&	38,594	&	6,058	&	r	&	880	&	0.1/7	&	r\\
-Thai	&	40,182	&	5,544	&	t	&	14,925	&	0.5/36.4	&	t\\
-Farsi	&	58,651	&	12,291	&	a	&	198,605	&	2.6/60.5	&	a/{\bf r}\\
-Bulgarian 	&	68,446	&	19,045	&	c	&	316,631	&	3/66.3	&	c/{\bf r}\\
-Serbian	&	71,018	&	20,083	&	c	&	168,140	&	3.7/71.2	&	{\bf r}\\
-Indonesian 	&	73,962	&	18,021	&	r	&	67,633	&	1.1/61.5	&	r\\
-Slovak 	&	76,421	&	15,341&	r	&	233,093	&	2.6/65	&	r\\
-Korean	&	84,385	&	18,638		&	k	&	229,742	&	2.2/66.5	&	k\\
-Turkish 	&	86,277	&	22,080	&	r	&	1,272,881	&	3.3/47.9	&	r\\
-Ukrainan	&	91,022	&	22,383	&	c	&	14,056	&	0.5/35.3	&	{\bf r}\\
-Romanian	&	97,351	&	21,157	&	r	&	249,479	&	2.4/64.3	&	r\\
-Russian	&	295,944	&	105,084	&	c	&	423,009	&	1.6/57.5	&	c\\
-Spanish 	&	371,130	&	189,171	&	r	&	347,441	&	1.7/54.7	&	r\\
-Polish	&	438,053	&	96,739	&	r	&	261,463	&	1.3/57.8	&	r\\
+{\bf Tigrinya}	&	36	&	3	&	o	&	56	&	45	&	0.3/0.6	&	{\bf r}\\
+Punjabi 	&	401	&	101	&	o	&	76,311	&	57,539	&	12.2/57.7	&	o/{\bf r}\\ 	
+\bf{Kyrgyz}	&	492	&	77	&	c	&	74,890	&	22,510	&	2.6/42.4	&	{\bf r}\\
+Somali 	&	585	&	82	&	r	&	230	&	182	&	0.2/6.8	&	r\\ 
+{\bf Nepali} 	&	1,293	&	262	&	d	&	6,812	&	5,499	&	3.6/39.7	&	{\bf r}\\
+{\bf Tibetan}	&	1,358	&	35	&	i	&	59,083	&	8,068	&	2.5/35.1	&	{\bf r}\\
+Uighur	&	1,814	&	114	&	a/r	&	16,285	&	13,444	&	1.7/37.9	&	r\\
+Maltese 	&	1,896	&	706	&	r	&	7,574	&	4,814	&	2.9/44.7	&	r\\
+Turkmen	&	3,137	&	104	&	r	&	91,928	&	45,430	&	4.6/54	&	r\\
+{\bf Kazakh} 	&	3,470	&	606	&	c	&	145,750	&	38,066	&	1/34	&	{\bf r}\\
+{\bf Mongolian} 	&	4,009	&	847	&	c	&	948	&	714	&	0.3/20.7	&	{\bf r}\\
+Tatar		&	4,180	&	313	&	c/r	&	 8,557	&	6,633	&	1.7/33	&	c/r\\
+Kurdish	&	5,059	&	872	&	r	&	9,870	&	8,416	&	1.2/32	&	r\\
+Uzbek 	&	5,875	&	747	&	r/c	&	190,688	&	94,747	&	6.2/66.4	&	r\\
+Kapampangan	&	6,827	&	875	&	r	&	1,000	&	954	&	0.2/7	&	r\\
+{\bf Urdu} 	&	7,674	&	2,163	&	u	&	36,428	&	30,784	&	2.9/57.1	&	{\bf r}\\
+Irish	&	9,859	&	2,183	&	r	&	887&	869	&	0.2/23.5	&	r\\
+Azeri	&	12,568	&	2,518	&	r	&	231,891&	49,396	&	0.6/42.7	&	r\\
+Tamil	&	13,470	&	3,484	&	m	&	165,004	&	68,980	&	2.6/43.6	&	m\\
+Albanian 	&	13,714	&	3,197	&	r	&	188,563	&	124,289	&	5.4/55.6	&	r\\
+Afrikaans	&	14,315	&	4,637	&	r	&	11,389	&	9,861	&	0.8/50.2	&	r\\
+{\bf Hindi} 	&	14,824	&	5,349	&	d	&	58,179	&	58,179	&	2.2/37.7	&	{\bf r}\\
+Bangla 	&	16,026	&	2,607	&	b	&	1,606	&	1,280	&	0.2/20.6	&	b/{\bf r}\\
+Tagalog	&	17,757	&	2,534	&	r	&	247,662	&	124,046	&	3.5/65.8	&	r\\
+Latvian	&	22,737	&	5,064	&	r	&	148,363	&	123,160	&	3.9/65.5	&	r\\
+Bosnian 	&	23,144	&	5,457	&	r	&	18,283	&	16,198	&	1/44.5	&	r\\
+Welsh	&	25,292	&	3,592	&	r	&	25,832	&	22,280	&	2/50.1	&	r\\
+Latin 	&	31,195	&	3,380	&	r	&	18,884	&	11,645	&	0.9/36.3	&	r\\
+Basque 	&	38,594	&	6,058	&	r	&	880	&	793	&	0.1/7	&	r\\
+Thai	&	40,182	&	5,544	&	t	&	14,925	&	6,054	&	0.5/36.4	&	t\\
+Farsi	&	58,651	&	12,291	&	a	&	198,605	&	81,988	&	2.6/60.5	&	a/{\bf r}\\
+Bulgarian 	&	68,446	&	19,045	&	c	&	316,631	&	220,829	&	3/66.3	&	c/{\bf r}\\
+{\bf Serbian}	&	71,018	&	20,083	&	c	&	168,140	&	145,297	&	3.7/71.2	&	{\bf r}\\
+Indonesian 	&	73,962	&	18,021	&	r	&	67,633	&	30,491	&	1.1/61.5	&	r\\
+Slovak 	&	76,421	&	15,341&	r	&	233,093	&	187,234	&	2.6/65	&	r\\
+Korean	&	84,385	&	18,638		&	k	&	229,742	&	120,666	&	2.2/66.5	&	k\\
+Turkish 	&	86,277	&	22,080	&	r	&	1,272,881	&	681,172	&	3.3/47.9	&	r\\
+{\bf Ukrainan}	&	91,022	&	22,383	&	c	&	14,056	&	14,056	&	0.5/35.3	&	{\bf r}\\
+Romanian	&	97,351	&	21,157	&	r	&	249,479	&	197,234	&	2.4/64.3	&	r\\
+Russian	&	295,944	&	105,084	&	c	&	423,009	&	262,675	&	1.6/57.5	&	c\\
+Spanish 	&	371,130	&	189,171	&	r	&	347,441	&	283,138	&	1.7/54.7	&	r\\
+Polish	&	438,053	&	96,739	&	r	&	261,463	&	220,119	&	1.3/57.8	&	r\\
 \end{tabular}
 \end{center}
 \normalsize
-\caption{Wikipedia and dictionary statistics. The third and last columns contain predominant scripts in Wikipedia and dictionary scripts: Roman (r), Cyrillic (c), Arabic (a), Korean (k), Thai (t), Bangla (b), Devanagari (d), Tamil (m),  Urdu (u), Indic (i), or other (o).  Romanized dictionaries are marked in bold.}
+\caption{Wikipedia and dictionary statistics. The third and last columns contain predominant scripts in Wikipedia and dictionary scripts: Roman (r), Cyrillic (c), Arabic (a), Korean (k), Thai (t), Bangla (b), Devanagari (d), Tamil (m),  Urdu (u), Indic (i), or other (o).  Romanized dictionaries are marked in bold.  In this work, we only use single token translations (6th column) for projecting contextual vectors and evaluation.}
 \label{fig:wikidictstats}
 \end{table}
 
-\mtodo{If we drop phrases, dict sizes decrease by 1/3 to 1/2}
-
 %\mtodo{Cannot find the coverage run logs.  Compare some to Ben's runs.  Check dict num tokens.}
 
-\noindent{\em Dictionaries and stopword lists.}  Dictionaries provide a crucial resource for projecting vector-base representations of equivalence classes and for evaluating the quality of induced lexicons.  \tabref{fig:wikidictstats} lists the sizes of our dictionaries, along with their coverage of the English side of the ``comparable'' bilingual Wikipedia subsets in column 2.  Type coverage measures the proportion of unique Wikipedia English words which have an entry in the dictionary, while token coverage takes into account their corpus counts. Low type coverage for most languages is primarily due to misspelled or incorrectly extracted article text in Wikipedia articles generating a long tail of low frequency words, and noise in the dictionaries themselves.  On the target side, dictionary noise and rich morphology of some of the languages we consider also substantially reduces coverage.  Moreover, some of the dictionaries contain romanized translations (boldfaced in the last column of \tabref{fig:wikidictstats}) and are not used in the results we present here.  Investigating automatic techniques to induce the original language script from dictionary romanization is a subject of ongoing work.
+\noindent{\em Bilingual Dictionaries.}  Dictionaries provide a crucial resource for projecting vector-base representations of equivalence classes and for evaluating the quality of induced lexicons.  \tabref{fig:wikidictstats} lists the sizes of our dictionaries along with their coverage of the English side of the ``comparable'' bilingual Wikipedia subsets in column 2.  Type coverage measures the proportion of unique Wikipedia English words which have an entry in the dictionary, while token coverage takes into account their corpus counts. Low type coverage for most languages is primarily due to misspelled or incorrectly extracted article text in Wikipedia articles generating a long tail of low frequency words, and noise in the dictionaries themselves.  On the target side, dictionary noise and rich morphology of some of the languages we consider also substantially reduces coverage.  Moreover, some of the dictionaries contain romanized translations (boldfaced in the last column of \tabref{fig:wikidictstats}) and are not used in the results we present here.  Investigating automatic techniques to induce the original language script from dictionary romanization is a subject of future work.  We propose an alternative method of obtaining small translation lexicons in \secref{sect:mturk}.\\ 
 
-
-Due to these reasons, evaluation results we present below tend to be conservative.  We propose an alternative method of obtaining small translation lexicons in \secref{sect:mturk}.  Finally, we have also collected stop words for Farsi, Bangla, Hindi, Polish, Spanish, Russian, Romanian, and English.\\
+\noindent{\em Stopword lists.} We have also collected stop words for Farsi, Bangla, Hindi, Polish, Spanish, Russian, Romanian, and English.\\
 
 \noindent{\em News wire}.  We have assembled additional monolingual corpora by continuously crawling a set of regularly updated news websites.  Up to 10 years of collected and processed data are listed in \tabref{fig:newsstats} for 25 languages: the last page counts a number of tokens collected and the previous columns list the number of days with at least one associated story for each of the 10 years.  We used a set of heuristics to extract language and temporal information from page URL and body text; a substantial portion of the total of 1.4 billion tokens of crawled data not included in the table still remains to be processed for language and time.\\
 
@@ -323,10 +330,10 @@ Chinese	&	-	&	-	&	-	&	-	&	-	&	5	&	1	&	6	&	7	&	14	&	32	&	1,864,565\\
 
 We evaluate performance of the lexicon induction framework on the monolingual resources we have collected and described in \secref{sect:resources}.  In the first set of experiments, we consider a high resource language pair to establish relative efficacy of the cues and to get a sense of an upper bound on the overall performance. We then induce translations between English and ten low resource languages.  Since many of the seed and test dictionaries are sparse and noisy, we investigate the feasibility of crowd-sourcing annotations and their use in an iterative induction procedure. \\ %Finally, we investigate heuristics we discussed in \secref{sect:morph} for handling morphology.\\
 
-For each language, we construct a test dictionary by randomly selecting $10\%$ of the entries in the corresponding bilingual dictionary (see \secref{sect:resources}), and leave the remainder as a seed lexicon for the contextual cue.  We select 1000 source words from the test dictionary and compute the accuracy of the induced translations.  The performance is measured by top-$k$ accuracy, i.e. the proportion of the source words which have at least one test dictionary translation among top $k$ of its induced candidates.  More formally, denote $D$ a set of tuples $\{(s_{i}, t_{i})\}_{i=1}^{1000}$ of source words and their corresponding ranked lists of translations, a function $r(t, j)$ which returns a set of translation candidates at position $j$ or above in ranking $t$, and a function $d(s, w)$ which returns true iff any translation candidates in a set $w$  for $s$ is present in the test dictionary.  The accuracy at top-k is then computed as follows\footnote{$\llbracket \cdot \rrbracket$ is one if the predicate inside the brackets is true, and zero otherwise.}:
+For each language, we construct a test dictionary by randomly selecting $10\%$ of the entries in the corresponding bilingual dictionary (see \secref{sect:resources}), and leave the remainder as a seed lexicon for the contextual cue.  We select 1000 source words from the test dictionary and compute the accuracy of the induced translations.  The performance is measured by top-$k$ accuracy, i.e. the proportion of the source words which have at least one test dictionary translation among top $k$ of its induced candidates.  More formally, denote $D$ a set of tuples $\{(s_{i}, l_{i})\}_{i=1}^{1000}$ of source words and their corresponding ranked lists of translations, a function $r(l, j)$ which returns a set of translation candidates at position $j$ or above in ranking $l$, and a function $d(s, w)$ which returns true iff any translation candidates in a set $w$  for $s$ is present in the test dictionary.  The accuracy at top-k is then computed as follows\footnote{$\llbracket \cdot \rrbracket$ is one if the predicate inside the brackets is true, and zero otherwise.}:
 
 \begin{equation}
-  g(U, k) = {1 \over |U|}\sum_{(s,t) \in U} \llbracket d(s, r(t, k))\rrbracket
+  g(U, k) = {1 \over |U|}\sum_{(s,t) \in U} \llbracket d(s, r(l, k))\rrbracket
 \end{equation}
 
 Note that the reported performance is conservative since (1) as we discussed, our test dictionaries are both noisy and sparse, and (2) $g(U, k)$ does not account for multiple correct translations among top $k$ candidates. Unless mentioned otherwise, we use the simple equivalence class heuristic (i.e. each unique token is assigned its own equivalence class) when constructing both contextual vectors and candidates.  We do not consider stop words when constructing a list of source words and potential target translations.  For languages without a stop word list, we drop 200 equivalence classes which occur most frequently in our corpus.  However, we do not perform this pruning step when collecting contextual vectors. \\
@@ -444,25 +451,35 @@ In sum, we found that the iterative approach of automatically generating noisy a
 
 In this section we touch on some of the implementation details of the lexicon induction framework: we overview the data collection and lexicon induction procedures and explain how the framework can be extended to include new monolingual resources and cues derived from them.  
 
-\subsection{Data Collection} \label{sect:datacollect}
+\subsection{Data collection} \label{sect:datacollect}
 
-While some monolingual resources (see \secref{sect:resources}) are static, others require ongoing collection.  We have set up the nutch crawler\footnote{http://nutch.apache.org/} to continuously crawl a number of web sites generating news content in the languages of interest.  The crawl results are periodically processed (see \figref{fig:data}) to (1) parse page content and extract metadata associated with the page, (2) merge with previously extracted pages, (3) identify language of the page content, and (4) generate time annotated corpora for each of the languages.  See \tabref{fig:wikidictstats} for a current summary of the collected data.
+While some monolingual resources (see \secref{sect:resources}) are static, others require ongoing collection.  We have set up the nutch crawler\footnote{http://nutch.apache.org/} to continuously crawl a set of web sites generating news content in the languages of interest (see \tabref{fig:wikidictstats} for the current summary of the collected data).  The crawl results are periodically processed (see \figref{fig:data}) by the following steps implemented as Hadoop MapReduce jobs:
+
+\begin{enumerate}
+ \item Parse new page content and extract metadata associated with each page (see \small{\tt NutchPageExtractor}).
+ \item Merge new and previously extracted pages (\small{\tt PageMerger}).
+ \item For each new page, identify the content language either by using the Google Language API (\small{\tt LangIdentifier}) or from its URL using site-specific heuristics (\small{\tt URLAndContentsLangTimeExtractor}).  Identify publication time either from page content or its URL using site-specific heuristics.
+ \item Generate a dataset for each language from pages annotated withe language and time in the previous step (\small{\tt DatedCorpusGenerator}).  
+\end{enumerate}
 
 \begin{figure}[h]
-\centerline{\mbox{\includegraphics[width=3in]{figures/datacollect}}}
+\centerline{\mbox{\includegraphics[width=3.5in]{figures/datacollect}}}
 \caption{Ongoing data collection.}
 \label{fig:data}
 \end{figure}
 
-\subsection{Lexicon Induction Procedure}
+Including a new language in the collection process is simple.  First, a web site publishing content in that language is added to a list of pages crawled by the nutch crawler.  Then, a set of heuristics to identify language and publication time from page URL, content, or metadata collected by the crawler is added to \small{\tt URLAndContentsLangTimeExtractor}.
 
-Let us turn to the induction procedure, highlight some of the most relevant code, and show how the framework can be extended to include new monolingual resources and cues.  \figref{fig:packages} shows the implementation layout and \figref{fig:system} gives a high level view of the lexicon induction procedure.\\
+\subsection{Lexicon induction procedure}
 
-\begin{figure}[h]
-\centerline{\mbox{\includegraphics[width=3in]{figures/packages}}}
-\caption{Package layout of the lexicon induction framework.}
-\label{fig:packages}
-\end{figure}
+We now briefly describe how the procedure for inducing a bilingual dictionary for a given set of words is implemented in code.  We highlight some of the most relevant classes, and show how the framework can be extended to include new monolingual resources and cues.  \figref{fig:system} gives a high level view of the lexicon induction procedure.\\
+%\figref{fig:packages} shows the implementation layout and \figref{fig:system} gives a high level view of the lexicon induction procedure.\\
+
+%\begin{figure}[h]
+%\centerline{\mbox{\includegraphics[width=3in]{figures/packages}}}
+%\caption{Package layout of the lexicon induction framework.}
+%\label{fig:packages}
+%\end{figure}
 
 We argued in \secref{sect:morph} that collecting aggregate statistics for morphological variants of a single lexeme is important when dealing with morphologically rich languages.   Base class \small{\tt EquivalenceClass} groups morphological variants present in the data into equivalence classes and maintains a set of aggregate statistics derived from monolingual cues.  In turn, each of the statistics, or properties, is implemented by a subclass of \small{\tt Property}. \\
 
@@ -498,13 +515,39 @@ In order to extend the framework to add a new monolingual resource and/or includ
 %\newpage
 
 %-----------------------------------------------------
-\section{Conclusions and Future Work}
+\section{Challenges}
+
+As quantities of data we collect continues to increase, so does the computational cost associated with processing them.  When searching for translations, we consider each of the $M$ target candidates for all of the $N$ source words making $M \times N$ similarity computations for each cue.  Growing monolingual datasets mean larger sizes of both source and target vocabularies due to open-class words (e.g. Named Entities, slang, borrowed words, etc.).  Moreover, vector representations of both source words and target candidates also grow (e.g. larger context vectors and temporal distributions) requiring more cycles for each similarity computation.  Needless to say, the computational costs jump substantially as we move from word to phrase translation lexicons.  To address this challenge, we are building on existing work  (e.g. \cite{LiChurchHastieNIPS08,Li:2010,VanDurmeLallIJCAI09,VanDurmeLallNIPS09,VanDurmeLallACL10}) to efficiently compute token co-occurrence metrics over large document collections. Using these techniques will enable us to process extremely large data improving both the coverage and quality of induced lexicons.\\
+
+Noisy dictionaries mean less informative contextual cue as well as inaccurate evaluation of induced lexicons. In \secref{sect:mturk} we showed that crowed-sourced annotation can be obtained cheaply for most of the low resource languages we considered.  We plan to continue investigating methods for gathering human annotation for both induction and evaluation.\\
+
+Simple heuristics for handling morphology (see \secref{sect:morph}) may be sufficient for some of the languages we consider.  However, improving lexicons for morphologically productive languages may require more sophisticated techniques.  We cannot generally assume that we have access to linguistic expertise to encode morphological rules for our languages of interest, and will investigate unsupervised techniques for morphological segmentation (e.g. \cite{Snyder:2008, Poon:2009a}).\\
+
+Aggregating multiple informative and independent cues improves the quality of induced lexicons (see \secref{sect:exphigh}).  However, when only a few signals of varying quality are available, simple aggregation heuristics may be ineffective.  We will use the available supervision (in the form of seed dictionary translations) to induce better aggregation models.  For languages with insufficient dictionaries, we will consider unsupevised techniques instead (e.g. \cite{Klementiev:2006b, Klementiev:2008a}).
+
+%-----------------------------------------------------
+\section{Next Steps}
+
+Addressing the challenges outlined in the previous section should improve the preliminary lexicon induction results we described in \secref{sect:experiments}.  However, one of the main objectives of the BABEL project and our next immediate goal is to study machine translation models that can be trained on these resources instead of exclusively relying on parallel data. \\
+
+Current state of the state of the art translation systems (e.g. \cite{Chiang:2005}) use the log-linear formulation  \cite{Och:2002} to model translation:
+
+\begin{equation}
+P(\mathbf{e} | \mathbf{f}) \propto \exp \sum_{i=1}^{n}{\lambda_i h_i (\mathbf{e}, \mathbf{f})} \label{log-linear-formulation}
+\end{equation}
+
+where  $h_i$ is an arbitrary feature function that can be used to score a hypothesis English translation $\mathbf{e}$ of some foreign sentence $\mathbf{f}$.  Feature functions typically include a phrase translation probability, a language model probability, a lexical translation probability, and a reordering probability.  The weights $\lambda_i$ are generally estimated to minimize the amount of translation error against a known reference translation.  We will use this discriminative formulation to model translation for low-resource languages, but will augment it with feature functions derived from monolingual cues we have defined.  \\
+
+Our immediate goal is to study how informative the monolingual data we have collected are for inferring phrase translation probabilities when varying amount of parallel data is available:
 
 \begin{itemize}
-  \item Investigated the efficacy of monolingual cues for a number of low-density languages / resources. If the objective is wide coverage, results reported in prior work are misleading.
-  \item Bilingual lexicons is preliminary step for low resource MT.  Incorporate metric scores as features.
-  \item Aggregation schemes for few signals and some amount of supervised data.
+  \item First, we will assume that phrase pairs are extracted from a full parallel corpus for a resource-rich language pair.  We will include the feature functions derived from monolingual cues to see if any improvement can be made in the high resource setting.
+  \item Varying the amount of parallel data for estimating phrase translation probabilities should provide the first indication about the tradeoff between the monolingual and parallel data resources required to achieve similar performance.  
+  \item When no parallel data is available, monolingual data itself must be used to derive phrase pairs as well as score their translations.  Successfully extracting a translation table requires addressing the computational challenge outlined in the previous section.
+  \item Extending the results to a large set of low resource languages is the ultimate goal of this stage of the projects.
 \end{itemize}
+
+After the lexical choice, the next most complicated aspect of machine translation is placing translated words in correct order.  While n-gram language models constraint word order, an explicit estimate of phrase reordering probability has a significant impact on the quality of resulting translation.  Inducing these probabilities from monolingual texts is the next goal of the project.  We believe that we can induce these probabilities by looking at pairs of adjacent words or phrases, and seeing how often their known translations co-occur in sentences in monolingual target language texts.  
 
 %-----------------------------------------------------
 % Notes: 
