@@ -24,7 +24,8 @@ lines(all$K, all$Accuracy.TopK, type="o", pch=pts[4], lty=types[4], lwd=3, col=c
 
 grid(col = "black", lty = "dotted", lwd = 1, equilogs = TRUE)
 
-title(ylab="Accuracy")
+mtext("Most Frequent", NORTH<-3, line=1.7, cex=tsize)
+title(ylab="Accuracy (Europarl)")
 #title(xlab="k in top-k")
 
 legend("bottomright", cex=1, names, col=colors, lty=types, pch=pts, lwd=3, bty="y", bg="white");

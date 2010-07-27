@@ -26,6 +26,7 @@ grid(col = "black", lty = "dotted", lwd = 1, equilogs = TRUE)
 
 #title(ylab="Accuracy")
 #title(xlab="k in top-k")
+mtext("Random", NORTH<-3, line=1.7, cex=tsize)
 
 legend("bottomright", cex=1, names, col=colors, lty=types, pch=pts, lwd=3, bty="y", bg="white");
 
