@@ -27,8 +27,8 @@ for (i in (1:(length(langs)))) {
 grid(col = "black", lty = "dotted", lwd = 1, equilogs = TRUE)
 
 #title(xlab="k in top-k")
-#title(ylab="Accuracy")
-mtext("Random", NORTH<-3, line=1.7, cex=tsize)
+title(ylab="Accuracy (Contextual cue)")
+#mtext("Random", NORTH<-3, line=1.7, cex=tsize)
 
 legend("bottomright", langs, cex=t1size, col=colors, lty=types, pch=pts, lwd=3, bty="y", bg="white");
 
